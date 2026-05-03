@@ -21,17 +21,34 @@ import {
   Compass, Image as ImageIcon, Star, ShieldCheck
 } from 'lucide-react';
 
-// --- Hardcoded Configuration for Vercel Deployment ---
-const firebaseConfig = {
-  apiKey: "AIzaSyDvLSW-T46JLmnVYRGQ9WFO0UMno8AULuU",
-  authDomain: "niagara-tours.firebaseapp.com",
-  projectId: "niagara-tours",
-  storageBucket: "niagara-tours.firebasestorage.app",
-  messagingSenderId: "1098010109074",
-  appId: "1:1098010109074:web:1f94e932a0d6967f87f24b"
+// --- Dynamic Configuration Logic ---
+// We check for environment-provided config first to avoid token-mismatch errors in preview,
+// then fall back to hardcoded keys for Vercel production.
+const getFirebaseConfig = () => {
+  if (typeof window !== 'undefined' && window.__firebase_config) {
+    try {
+      return JSON.parse(window.__firebase_config);
+    } catch (e) {
+      console.error("Firebase config parse error", e);
+    }
+  }
+  return {
+    apiKey: "AIzaSyDvLSW-T46JLmnVYRGQ9WFO0UMno8AULuU",
+    authDomain: "niagara-tours.firebaseapp.com",
+    projectId: "niagara-tours",
+    storageBucket: "niagara-tours.firebasestorage.app",
+    messagingSenderId: "1098010109074",
+    appId: "1:1098010109074:web:1f94e932a0d6967f87f24b"
+  };
 };
 
-const appId = "niagara_tours_prod_v1";
+const getAppId = () => {
+  if (typeof window !== 'undefined' && window.__app_id) return window.__app_id;
+  return "niagara_tours_prod_v1";
+};
+
+const firebaseConfig = getFirebaseConfig();
+const appId = getAppId();
 
 // Initialize Services
 const app = initializeApp(firebaseConfig);
@@ -55,12 +72,12 @@ const SafeImage = ({ src, alt, className }) => {
 
 const Logo = ({ light = false }) => (
   <div className="flex items-center gap-3">
-    <div className="w-10 h-10 bg-[#F5A623] rounded-xl flex items-center justify-center shadow-lg">
-      <Compass className={light ? "text-white" : "text-[#0F3D3E]"} size={24} />
+    <div className="w-10 h-10 bg-[#F5A623] rounded-xl flex items-center justify-center shadow-lg shrink-0">
+      <Compass className={light ? "text-white" : "text-[#0F3D3E]"} size={22} />
     </div>
-    <div className="flex flex-col text-left">
-      <span className={`text-xl font-black tracking-tighter leading-none uppercase ${light ? 'text-white' : 'text-[#0F3D3E]'}`}>NIAGARA</span>
-      <span className="text-[0.6rem] font-bold tracking-[0.4em] text-[#F5A623] uppercase">Tours</span>
+    <div className="flex flex-col text-left leading-none">
+      <span className={`text-lg font-black tracking-tighter uppercase ${light ? 'text-white' : 'text-[#0F3D3E]'}`}>NIAGARA</span>
+      <span className="text-[0.55rem] font-bold tracking-[0.3em] text-[#F5A623] uppercase">Tours</span>
     </div>
   </div>
 );
@@ -83,22 +100,22 @@ const Nav = ({ setView, activeView }) => {
   ];
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg py-4' : 'bg-transparent py-8'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg py-3' : 'bg-transparent py-6'}`}>
+      <div className="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between">
         <button onClick={() => { setView('home'); setIsOpen(false); }} className="hover:opacity-80 transition-opacity">
           <Logo light={!scrolled && activeView === 'home'} />
         </button>
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-8">
           {links.map(link => (
             <button 
               key={link.id} 
               onClick={() => setView(link.id)} 
-              className={`text-[0.7rem] font-black uppercase tracking-[0.2em] transition-all hover:text-[#F5A623] ${activeView === link.id ? 'text-[#F5A623]' : (scrolled || activeView !== 'home' ? 'text-[#0F3D3E]' : 'text-white')}`}
+              className={`text-[0.65rem] font-black uppercase tracking-[0.15em] transition-all hover:text-[#F5A623] ${activeView === link.id ? 'text-[#F5A623]' : (scrolled || activeView !== 'home' ? 'text-[#0F3D3E]' : 'text-white')}`}
             >
               {link.label}
             </button>
           ))}
-          <button onClick={() => setView('booking')} className="bg-[#0F3D3E] text-white px-8 py-3 rounded-full text-[0.65rem] font-bold uppercase tracking-widest hover:bg-[#F5A623] transition-all">Book Now</button>
+          <button onClick={() => setView('booking')} className="bg-[#0F3D3E] text-white px-7 py-2.5 rounded-full text-[0.6rem] font-bold uppercase tracking-widest hover:bg-[#F5A623] transition-all">Book Now</button>
         </div>
         <button className={`md:hidden p-2 rounded-lg ${scrolled || activeView !== 'home' ? 'text-[#0F3D3E]' : 'text-white'}`} onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -109,6 +126,7 @@ const Nav = ({ setView, activeView }) => {
           {links.map(link => (
             <button key={link.id} onClick={() => { setView(link.id); setIsOpen(false); }} className={`text-left text-lg font-black uppercase tracking-widest ${activeView === link.id ? 'text-[#F5A623]' : 'text-[#0F3D3E]'}`}>{link.label}</button>
           ))}
+          <button onClick={() => { setView('booking'); setIsOpen(false); }} className="bg-[#0F3D3E] text-white py-4 rounded-xl font-black uppercase tracking-widest text-sm">Book Now</button>
         </div>
       )}
     </nav>
@@ -175,10 +193,16 @@ export default function App() {
     const initAuth = async () => {
       try {
         const token = typeof window !== 'undefined' ? window.__initial_auth_token : null;
-        if (token) await signInWithCustomToken(auth, token);
-        else await signInAnonymously(auth);
+        if (token) {
+          // If we have a token, we MUST use signInWithCustomToken
+          await signInWithCustomToken(auth, token);
+        } else {
+          await signInAnonymously(auth);
+        }
       } catch (err) {
         console.error("Auth error:", err);
+        // Fallback for mismatch or token errors
+        try { await signInAnonymously(auth); } catch(e) {}
       }
     };
     initAuth();
@@ -199,7 +223,9 @@ export default function App() {
       } else {
         setTours(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       }
-    }, (err) => setErrorMsg("Database sync failed. Check Firestore rules."));
+    }, (err) => {
+      console.error("Firestore sync error:", err);
+    });
     return () => unsubscribe();
   }, [user]);
 
@@ -208,52 +234,105 @@ export default function App() {
     setIsSubmitting(true);
     try {
       const bookingsRef = collection(db, 'artifacts', appId, 'public', 'data', 'bookings');
-      await addDoc(bookingsRef, { ...data, tourId: selectedTour?.id || 'general', userId: user.uid, createdAt: serverTimestamp() });
+      await addDoc(bookingsRef, { 
+        ...data, 
+        tourId: selectedTour?.id || 'general', 
+        tourName: selectedTour?.name || 'Custom',
+        userId: user.uid, 
+        createdAt: serverTimestamp() 
+      });
       setView('success');
     } catch (err) {
-      setErrorMsg("Booking failed.");
+      setErrorMsg("Booking failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDF9] font-sans selection:bg-[#F5A623]/20 text-stone-900">
+    <div className="min-h-screen bg-[#FDFDF9] font-sans selection:bg-[#F5A623]/20 text-stone-900 overflow-x-hidden">
       <Nav setView={setView} activeView={view} />
-      {errorMsg && <div className="fixed bottom-4 right-4 bg-red-600 text-white p-4 rounded-xl z-[100]">{errorMsg}</div>}
-      <main className="pt-0">
+      {errorMsg && <div className="fixed bottom-4 right-4 bg-red-600 text-white p-4 rounded-xl z-[100] animate-fade-in">{errorMsg}</div>}
+      <main>
         {view === 'home' && (
           <>
-            <section className="relative h-[90vh] flex items-center px-6 overflow-hidden">
-              <SafeImage src="https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&q=80&w=2000" className="absolute inset-0 w-full h-full object-cover brightness-[0.4]" />
-              <div className="relative z-10 max-w-7xl mx-auto w-full text-white animate-slide-up text-left">
-                <h1 className="text-6xl md:text-[8rem] font-black tracking-tighter uppercase leading-[0.85]">Niagara <br/><span className="text-[#F5A623]">Redefined.</span></h1>
-                <button onClick={() => setView('tours')} className="mt-10 bg-[#F5A623] px-12 py-6 rounded-full font-black uppercase shadow-2xl hover:bg-white hover:text-[#0F3D3E] transition-all">Explore Collections</button>
+            <section className="relative h-[92vh] flex items-center overflow-hidden">
+              <SafeImage src="https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&q=80&w=2000" className="absolute inset-0 w-full h-full object-cover brightness-[0.45]" />
+              <div className="relative z-10 max-w-7xl mx-auto w-full px-8 md:px-12 animate-slide-up text-left">
+                <div className="inline-flex items-center gap-2 mb-6 bg-[#F5A623]/10 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-[#F5A623]/20">
+                  <Star size={12} className="text-[#F5A623]" fill="currentColor" />
+                  <span className="text-[0.55rem] font-black uppercase tracking-[0.2em] text-[#F5A623]">Niagara's Premier Choice</span>
+                </div>
+                <h1 className="text-6xl md:text-[8.5rem] font-black tracking-tighter uppercase leading-[0.82] text-white">Niagara <br/><span className="text-[#F5A623]">Redefined.</span></h1>
+                <p className="text-white/80 text-lg md:text-xl mt-8 max-w-xl font-medium leading-relaxed">Luxury small-group departures from Toronto. Experience the power and majesty with world-class hospitality.</p>
+                <div className="flex flex-wrap gap-4 mt-12">
+                  <button onClick={() => setView('tours')} className="bg-[#F5A623] px-10 py-5 rounded-full font-black uppercase text-[0.65rem] tracking-widest shadow-2xl hover:bg-white hover:text-[#0F3D3E] transition-all transform hover:-translate-y-1">Explore Collections</button>
+                </div>
               </div>
             </section>
-            <section className="py-24 px-6 max-w-7xl mx-auto">
-              <h2 className="text-4xl font-black text-[#0F3D3E] uppercase mb-12 tracking-tighter text-left">Signature Journeys</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <section className="py-24 px-8 md:px-12 max-w-7xl mx-auto">
+              <div className="flex items-center justify-between mb-12">
+                <h2 className="text-4xl font-black text-[#0F3D3E] uppercase tracking-tighter">Signature Journeys</h2>
+                <div className="h-px bg-stone-200 flex-grow mx-8 hidden md:block" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                 {tours.map(t => <TourCard key={t.id} tour={t} onSelect={(t) => {setSelectedTour(t); setView('booking');}} onDetail={(t) => {setSelectedTour(t); setView('detail');}} />)}
               </div>
             </section>
           </>
         )}
         {view === 'tours' && (
-          <section className="py-32 px-6 max-w-7xl mx-auto text-left">
-            <h1 className="text-6xl font-black text-[#0F3D3E] uppercase mb-16 tracking-tighter">Collections</h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">{tours.map(t => <TourCard key={t.id} tour={t} onSelect={(t) => {setSelectedTour(t); setView('booking');}} onDetail={(t) => {setSelectedTour(t); setView('detail');}} />)}</div>
+          <section className="py-32 px-8 md:px-12 max-w-7xl mx-auto text-left">
+            <h1 className="text-6xl font-black text-[#0F3D3E] uppercase mb-16 tracking-tighter">Our Collections</h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 animate-fade-in">{tours.map(t => <TourCard key={t.id} tour={t} onSelect={(t) => {setSelectedTour(t); setView('booking');}} onDetail={(t) => {setSelectedTour(t); setView('detail');}} />)}</div>
           </section>
         )}
-        {view === 'booking' && <section className="py-32 px-6"><BookingForm tour={selectedTour} onSubmit={handleBooking} onCancel={() => setView('home')} isSubmitting={isSubmitting} /></section>}
-        {view === 'success' && <section className="py-48 text-center animate-fade-in"><CheckCircle className="text-[#F5A623] mx-auto mb-8" size={80} /><h2 className="text-7xl font-black text-[#0F3D3E] uppercase tracking-tighter">Confirmed.</h2><button onClick={() => setView('home')} className="mt-12 bg-[#0F3D3E] text-white px-12 py-6 rounded-full font-black uppercase">Return Home</button></section>}
+        {view === 'about' && (
+          <section className="py-32 px-8 md:px-12 max-w-4xl mx-auto text-left animate-fade-in">
+             <span className="text-[#F5A623] text-[0.6rem] font-black uppercase tracking-[0.4em] mb-4 block">Our Legacy</span>
+             <h1 className="text-6xl font-black text-[#0F3D3E] uppercase mb-12 tracking-tighter">Crafting Memories Since 1994.</h1>
+             <p className="text-2xl text-[#0F3D3E] font-bold leading-tight mb-8">Founded in the heart of Toronto, Niagara Tours has redefined the standard of luxury excursions in Ontario.</p>
+             <p className="text-xl text-stone-500 leading-relaxed">Our journey began with a single vision: to transform a simple day trip into a sophisticated, story-driven expedition. Today, we pride ourselves on small-group intimacy and strictly curated experiences.</p>
+          </section>
+        )}
+        {view === 'contact' && (
+          <section className="py-32 px-8 md:px-12 max-w-7xl mx-auto text-left animate-fade-in">
+             <h1 className="text-7xl font-black text-[#0F3D3E] uppercase mb-16 tracking-tighter">Concierge.</h1>
+             <div className="grid md:grid-cols-2 gap-20">
+                <div className="space-y-10">
+                   <div className="flex items-center gap-6"><div className="w-14 h-14 rounded-2xl bg-stone-100 flex items-center justify-center text-[#F5A623]"><Phone size={24} /></div> <p className="text-2xl font-black text-[#0F3D3E] tracking-tight">+1 416-555-0199</p></div>
+                   <div className="flex items-center gap-6"><div className="w-14 h-14 rounded-2xl bg-stone-100 flex items-center justify-center text-[#F5A623]"><Mail size={24} /></div> <p className="text-2xl font-black text-[#0F3D3E] tracking-tight">hello@niagaratours.ca</p></div>
+                </div>
+                <div className="bg-white p-10 rounded-[2.5rem] shadow-xl border border-stone-100">
+                   <h3 className="text-xl font-black text-[#0F3D3E] uppercase mb-8 tracking-tighter">Direct Inquiry</h3>
+                   <form className="space-y-5" onSubmit={e => e.preventDefault()}>
+                      <input className="w-full bg-stone-50 p-5 rounded-2xl outline-none focus:border-[#F5A623] border border-transparent transition-all" placeholder="Your Name" />
+                      <textarea rows="4" className="w-full bg-stone-50 p-5 rounded-2xl outline-none focus:border-[#F5A623] border border-transparent transition-all" placeholder="Your Message"></textarea>
+                      <button className="w-full bg-[#0F3D3E] text-white py-5 rounded-2xl font-black uppercase tracking-widest">Dispatch Inquiry</button>
+                   </form>
+                </div>
+             </div>
+          </section>
+        )}
+        {view === 'booking' && <section className="py-32 px-8 md:px-12"><BookingForm tour={selectedTour} onSubmit={handleBooking} onCancel={() => setView('home')} isSubmitting={isSubmitting} /></section>}
+        {view === 'success' && <section className="py-48 text-center animate-fade-in px-8"><CheckCircle className="text-[#F5A623] mx-auto mb-8" size={80} /><h2 className="text-7xl font-black text-[#0F3D3E] uppercase tracking-tighter">Confirmed.</h2><button onClick={() => setView('home')} className="mt-12 bg-[#0F3D3E] text-white px-12 py-6 rounded-full font-black uppercase transition-all hover:bg-[#F5A623]">Return Home</button></section>}
       </main>
-      <footer className="bg-[#0F3D3E] text-white py-24 text-center mt-20"><Logo light /><p className="text-[0.55rem] font-black uppercase tracking-[0.4em] opacity-30 mt-12">© 2026 Niagara Tours Canada</p></footer>
+      <footer className="bg-[#0F3D3E] text-white py-24 text-center mt-20">
+        <div className="flex flex-col items-center gap-2 mb-12">
+          <Logo light />
+        </div>
+        <div className="flex justify-center gap-8 mb-16">
+          <Instagram className="text-white/40 hover:text-[#F5A623] cursor-pointer transition-colors" size={20} />
+          <Facebook className="text-white/40 hover:text-[#F5A623] cursor-pointer transition-colors" size={20} />
+          <Twitter className="text-white/40 hover:text-[#F5A623] cursor-pointer transition-colors" size={20} />
+        </div>
+        <p className="text-[0.5rem] font-black uppercase tracking-[0.4em] opacity-30 px-6">© 2026 Niagara Tours Canada • All Rights Reserved</p>
+      </footer>
       <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes slide-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-slide-up { animation: slide-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slide-up { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide-up { animation: slide-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-        .animate-fade-in { animation: fade-in 1s ease-out forwards; }
+        .animate-fade-in { animation: fade-in 1.2s ease-out forwards; }
       `}} />
     </div>
   );
