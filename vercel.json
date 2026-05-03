@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
+3.  **Push this new file to GitHub**:
+```bash
+git add vercel.json
+git commit -m "Add vercel.json to fix 403 Forbidden routing error"
+git push
