@@ -21,31 +21,24 @@ import {
   Compass, Image as ImageIcon, Star, ShieldCheck
 } from 'lucide-react';
 
-// --- Firebase Configuration ---
-const getFirebaseConfig = () => {
-  if (typeof window !== 'undefined' && window.__firebase_config) {
-    try {
-      return JSON.parse(window.__firebase_config);
-    } catch (e) {
-      console.error("Firebase config error:", e);
-    }
-  }
-  return { apiKey: "" }; // Vercel should use Environment Variables
+// --- Hardcoded Configuration for Vercel Deployment ---
+const firebaseConfig = {
+  apiKey: "AIzaSyDvLSW-T46JLmnVYRGQ9WFO0UMno8AULuU",
+  authDomain: "niagara-tours.firebaseapp.com",
+  projectId: "niagara-tours",
+  storageBucket: "niagara-tours.firebasestorage.app",
+  messagingSenderId: "1098010109074",
+  appId: "1:1098010109074:web:1f94e932a0d6967f87f24b"
 };
 
-const getAppId = () => {
-  if (typeof window !== 'undefined' && window.__app_id) return window.__app_id;
-  return 'niagara-tours-v1';
-};
+const appId = "niagara_tours_prod_v1";
 
-const firebaseConfig = getFirebaseConfig();
-const appId = getAppId();
-
+// Initialize Services
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// --- Components ---
+// --- Helper Components ---
 
 const SafeImage = ({ src, alt, className }) => {
   const [error, setError] = useState(false);
@@ -127,10 +120,6 @@ const TourCard = ({ tour, onSelect, onDetail }) => (
     <div className="relative h-72 overflow-hidden">
       <SafeImage src={tour.image} alt={tour.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
       <div className="absolute top-6 left-6 bg-[#0F3D3E]/80 backdrop-blur-md px-4 py-2 rounded-lg text-white text-[0.6rem] font-black uppercase tracking-widest">{tour.category}</div>
-      <div className="absolute bottom-6 left-6 text-white z-10 text-left">
-        <p className="text-3xl font-black tracking-tighter">${tour.price}</p>
-        <p className="text-[0.5rem] font-bold uppercase tracking-widest opacity-80">Per Person</p>
-      </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
     </div>
     <div className="p-8 flex-grow flex flex-col justify-between text-left">
@@ -198,7 +187,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!user || !firebaseConfig.apiKey) return;
+    if (!user) return;
     const toursCollection = collection(db, 'artifacts', appId, 'public', 'data', 'tours');
     const unsubscribe = onSnapshot(toursCollection, (snap) => {
       if (snap.empty) {
@@ -210,7 +199,7 @@ export default function App() {
       } else {
         setTours(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       }
-    }, (err) => setErrorMsg("Database sync failed."));
+    }, (err) => setErrorMsg("Database sync failed. Check Firestore rules."));
     return () => unsubscribe();
   }, [user]);
 
