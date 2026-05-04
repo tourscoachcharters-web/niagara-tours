@@ -9,7 +9,7 @@ import {
   Facebook, Twitter, Mail, Phone, CheckCircle,
   Calendar, CreditCard, Camera, Leaf, Play,
   Coffee, Wine, Map, Sparkles, Utensils, HelpCircle,
-  Plus, MessageSquare, Quote
+  Plus, MessageSquare, Quote, Info
 } from 'lucide-react';
 
 // --- FIREBASE CONFIG ---
@@ -534,90 +534,197 @@ export default function App() {
           </section>
         )}
 
-        {/* TOUR DETAIL VIEW */}
+        {/* TOUR DETAIL VIEW - MODERN MAGAZINE LAYOUT */}
         {view === 'detail' && selectedTour && (
-          <section className="animate-fade-in pb-32">
-            <div className="relative h-[70vh] w-full bg-black">
+          <section className="animate-fade-in">
+            {/* HERO SECTION */}
+            <div className="relative h-[60vh] md:h-[70vh] w-full bg-black overflow-hidden">
               <SafeImage src={selectedTour.image} alt={selectedTour.name} className="w-full h-full object-cover" style={{ filter: 'brightness(0.6)' }} />
-              <div className="absolute inset-0 flex items-end"><div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full pb-20"><button onClick={() => setView('tours')} className="text-white/60 hover:text-white text-[0.6rem] font-bold uppercase tracking-widest mb-8 flex items-center gap-2"><ArrowRight size={14} className="rotate-180" /> Back to Packages</button><span className="bg-[#F5A623] text-[#0F3D3E] px-4 py-1.5 rounded-full text-[0.55rem] font-bold uppercase tracking-widest mb-6 inline-block">{selectedTour.category} Tour</span><h1 className="text-white text-6xl md:text-9xl font-black uppercase tracking-tighter leading-none">{selectedTour.name}</h1></div></div>
+              <div className="absolute inset-0 flex items-center">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full">
+                  <button onClick={() => setView('tours')} className="text-white/60 hover:text-white text-[0.65rem] font-black uppercase tracking-[0.3em] mb-8 flex items-center gap-2 transition-colors">
+                    <ArrowRight size={14} className="rotate-180" /> Back to Packages
+                  </button>
+                  <span className="bg-[#F5A623] text-[#0F3D3E] px-5 py-2 rounded-full text-[0.6rem] font-black uppercase tracking-[0.25em] mb-6 inline-block">
+                    {selectedTour.category} Tour
+                  </span>
+                  <h1 className="text-white text-5xl md:text-[8rem] font-black uppercase tracking-tighter leading-[0.9] max-w-5xl">
+                    {selectedTour.name}
+                  </h1>
+                </div>
+              </div>
             </div>
-            
-            <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-32 grid grid-cols-1 lg:grid-cols-3 gap-24">
-              <div className="lg:col-span-2 space-y-24 text-left">
-                <div>
-                   <h3 className="text-[0.65rem] font-black uppercase tracking-[0.4em] text-[#F5A623] mb-6">Experience Highlights</h3>
-                   <p className="text-3xl md:text-4xl font-medium text-[#0F3D3E] leading-tight italic border-l-[12px] border-[#F5A623] pl-12">{selectedTour.description}</p>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12">
+
+            {/* QUICK STATS BAR OVERLAP */}
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative -mt-16 z-20">
+               <div className="bg-white rounded-[2.5rem] shadow-2xl border border-stone-100 p-8 md:p-12 flex flex-wrap items-center justify-between gap-8">
+                  <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 rounded-2xl bg-stone-50 flex items-center justify-center text-[#F5A623]">
+                      <CreditCard size={28} />
+                    </div>
+                    <div>
+                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1">Premium Fare</p>
+                      <p className="text-3xl font-black text-[#0F3D3E] tracking-tighter">${selectedTour.price} <span className="text-sm font-normal text-stone-400">/ PP</span></p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 rounded-2xl bg-stone-50 flex items-center justify-center text-[#F5A623]">
+                      <Clock size={28} />
+                    </div>
+                    <div>
+                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1">Tour Duration</p>
+                      <p className="text-2xl font-black text-[#0F3D3E] tracking-tighter uppercase">{selectedTour.duration}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 rounded-2xl bg-stone-50 flex items-center justify-center text-[#F5A623]">
+                      <Users size={28} />
+                    </div>
+                    <div>
+                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1">Capacity</p>
+                      <p className="text-2xl font-black text-[#0F3D3E] tracking-tighter uppercase">{selectedTour.capacity} Guests</p>
+                    </div>
+                  </div>
+                  <button onClick={() => { setView('booking'); window.scrollTo(0,0); }} className="bg-[#0F3D3E] text-white px-10 py-5 rounded-2xl font-black uppercase text-[0.7rem] tracking-widest hover:bg-[#F5A623] transition-all shadow-xl hover:-translate-y-1">
+                    Reserve Now
+                  </button>
+               </div>
+            </div>
+
+            {/* MAIN CONTENT GRID */}
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-32 grid grid-cols-12 gap-12 md:gap-24 relative">
+              <div className="col-span-12 lg:col-span-8 space-y-32 text-left">
+                {/* 1. THE EXPERIENCE */}
+                <section>
+                   <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-[#F5A623] mb-10 flex items-center gap-4">
+                     <span className="w-12 h-px bg-[#F5A623]"></span> The Experience
+                   </h3>
+                   <p className="text-3xl md:text-5xl font-medium text-[#0F3D3E] leading-[1.1] mb-12 tracking-tight">
+                     {selectedTour.description}
+                   </p>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {selectedTour.highlights?.map((h, i) => (
-                        <div key={i} className="flex items-center gap-4 p-6 bg-white rounded-2xl border border-stone-100 shadow-sm">
-                           <Sparkles size={18} className="text-[#F5A623]" />
-                           <span className="text-sm font-black text-[#0F3D3E] uppercase tracking-widest">{h}</span>
+                        <div key={i} className="flex items-center gap-4 p-6 bg-stone-50 rounded-2xl border border-stone-100">
+                           <Sparkles size={18} className="text-[#F5A623] shrink-0" />
+                           <span className="text-xs font-black text-[#0F3D3E] uppercase tracking-widest">{h}</span>
                         </div>
                       ))}
                    </div>
-                </div>
+                </section>
 
-                <div>
-                  <h3 className="text-[0.65rem] font-black uppercase tracking-[0.4em] text-stone-400 mb-12 flex items-center gap-4"><Clock size={20} className="text-[#F5A623]" /> Detailed Tour Itinerary</h3>
-                  <div className="space-y-12 pl-4 border-l-2 border-stone-100 ml-2">
+                {/* 2. ITINERARY */}
+                <section>
+                  <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-stone-400 mb-16 flex items-center gap-4">
+                    <Clock size={20} className="text-[#F5A623]" /> Complete Tour Itinerary
+                  </h3>
+                  <div className="space-y-0 relative">
+                    <div className="absolute left-[15px] top-4 bottom-4 w-0.5 bg-stone-100 hidden md:block"></div>
                     {selectedTour.itinerary?.map((item, idx) => (
-                      <div key={idx} className="relative pl-12 group">
-                        <div className="absolute -left-[2.35rem] top-0 w-8 h-8 rounded-full bg-[#FDFDF9] border-2 border-stone-100 flex items-center justify-center text-[0.6rem] font-black text-[#F5A623] transition-colors">{idx + 1}</div>
-                        <div className="space-y-2">
-                           <div className="flex items-center gap-3"><span className="text-[0.7rem] font-black text-[#F5A623] uppercase tracking-widest">{item.time}</span><div className="h-px bg-stone-100 flex-grow" /></div>
-                           <h4 className="text-2xl font-black text-[#0F3D3E] uppercase tracking-tighter">{item.event}</h4>
-                           <p className="text-stone-500 text-lg leading-relaxed max-w-2xl">{item.desc}</p>
+                      <div key={idx} className="relative pb-16 last:pb-0 md:pl-20 group">
+                        <div className="absolute left-0 top-1.5 w-8 h-8 rounded-full bg-white border-2 border-stone-200 flex items-center justify-center z-10 group-hover:border-[#F5A623] transition-colors hidden md:flex">
+                           <div className="w-2 h-2 rounded-full bg-stone-200 group-hover:bg-[#F5A623] transition-colors"></div>
+                        </div>
+                        <div className="bg-white p-8 md:p-10 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                           <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
+                              <span className="text-[0.75rem] font-black text-[#F5A623] uppercase tracking-[0.2em]">{item.time}</span>
+                              <h4 className="text-2xl font-black text-[#0F3D3E] uppercase tracking-tighter">{item.event}</h4>
+                           </div>
+                           <p className="text-stone-500 text-lg leading-relaxed">{item.desc}</p>
                         </div>
                       </div>
                     ))}
                   </div>
-                </div>
+                </section>
 
-                <div className="bg-stone-50 rounded-[3rem] p-12 border border-stone-100">
-                   <h3 className="text-[0.65rem] font-black uppercase tracking-[0.4em] text-[#0F3D3E] mb-10 flex items-center gap-3"><ShieldCheck size={20} className="text-[#F5A623]" /> What's Included in Your Fare</h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* 3. INCLUSIONS */}
+                <section className="bg-[#0F3D3E] rounded-[3.5rem] p-12 md:p-20 text-white relative overflow-hidden">
+                   <Waves className="absolute -bottom-20 -right-20 text-white/5" size={400} />
+                   <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-[#F5A623] mb-12 flex items-center gap-4">
+                      <ShieldCheck size={20} /> What's Included
+                   </h3>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
                       {selectedTour.included?.map((inc, i) => (
-                        <div key={i} className="flex items-start gap-3"><CheckCircle size={18} className="text-[#F5A623] shrink-0" /><span className="text-sm font-bold text-[#0F3D3E]">{inc}</span></div>
-                      ))}
-                   </div>
-                </div>
-
-                <div>
-                   <h3 className="text-[0.65rem] font-black uppercase tracking-[0.4em] text-stone-400 mb-12 flex items-center gap-4"><HelpCircle size={20} className="text-[#F5A623]" /> Tour Knowledge Base</h3>
-                   <div className="space-y-4">
-                      {selectedTour.faqs?.map((faq, i) => (
-                        <div key={i} className="bg-white border border-stone-100 p-8 rounded-3xl shadow-sm">
-                           <h4 className="text-lg font-black text-[#0F3D3E] uppercase tracking-tighter mb-3 flex items-center gap-3"><Plus size={16} className="text-[#F5A623]" /> {faq.q}</h4>
-                           <p className="text-stone-500 leading-relaxed pl-7">{faq.a}</p>
+                        <div key={i} className="flex items-start gap-5">
+                           <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                              <CheckCircle size={18} className="text-[#F5A623]" />
+                           </div>
+                           <span className="text-lg font-bold leading-tight pt-1">{inc}</span>
                         </div>
                       ))}
                    </div>
-                </div>
+                </section>
+
+                {/* 4. KNOWLEDGE BASE */}
+                <section>
+                   <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-stone-400 mb-12 flex items-center gap-4">
+                      <HelpCircle size={20} className="text-[#F5A623]" /> Tour Knowledge Base
+                   </h3>
+                   <div className="grid gap-6">
+                      {selectedTour.faqs?.map((faq, i) => (
+                        <div key={i} className="bg-white border border-stone-100 p-10 rounded-3xl group hover:border-[#F5A623] transition-colors">
+                           <h4 className="text-xl font-black text-[#0F3D3E] uppercase tracking-tighter mb-4 flex items-center gap-3">
+                              <Plus size={18} className="text-[#F5A623] group-hover:rotate-90 transition-transform" /> {faq.q}
+                           </h4>
+                           <p className="text-stone-500 text-lg leading-relaxed pl-7">{faq.a}</p>
+                        </div>
+                      ))}
+                   </div>
+                </section>
               </div>
-              <div className="lg:col-span-1">
-                <div className="bg-white p-12 rounded-[4rem] shadow-2xl border border-stone-100 sticky top-32 text-left">
-                  <div className="mb-12 pb-12 border-b border-stone-100 space-y-6">
-                    <div className="flex justify-between items-end"><p className="text-stone-400 text-[0.65rem] font-black uppercase tracking-widest">Premium Fare</p><p className="text-5xl font-black text-[#0F3D3E] tracking-tighter">${selectedTour.price} <span className="text-sm font-normal text-stone-400 uppercase tracking-widest">Per Guest</span></p></div>
-                    <div className="flex justify-between items-end"><p className="text-stone-400 text-[0.65rem] font-black uppercase tracking-widest">Duration</p><p className="text-xl font-black text-[#0F3D3E] uppercase tracking-tighter">{selectedTour.duration}</p></div>
-                  </div>
-                  <button onClick={() => { setView('booking'); window.scrollTo(0,0); }} className="w-full bg-[#0F3D3E] text-white py-8 rounded-[2rem] font-black uppercase text-[0.8rem] tracking-[0.2em] shadow-2xl hover:bg-[#F5A623] transition-all transform hover:-translate-y-1">Request Reservation</button>
-                  <p className="text-[0.6rem] text-center text-stone-400 mt-6 font-bold uppercase tracking-widest">No immediate payment required for review</p>
+
+              {/* STICKY SIDEBAR (DESKTOP) */}
+              <aside className="hidden lg:block lg:col-span-4 h-fit sticky top-32">
+                <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-stone-100 relative">
+                   <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0F3D3E] text-white px-6 py-2 rounded-full text-[0.55rem] font-black uppercase tracking-widest shadow-lg">
+                      Official Reservation
+                   </div>
+                   <div className="text-center mb-10">
+                      <p className="text-stone-400 text-[0.6rem] font-black uppercase tracking-widest mb-2">Instant Confirmation</p>
+                      <div className="flex justify-center items-center gap-1 text-[#F5A623] mb-4">
+                         {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" strokeWidth={0} />)}
+                      </div>
+                   </div>
+                   <div className="space-y-6 mb-12">
+                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest">
+                         <ShieldCheck size={20} className="text-[#F5A623]" /> Certified Master Guide
+                      </div>
+                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest">
+                         <Map size={20} className="text-[#F5A623]" /> Private Transit Included
+                      </div>
+                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest">
+                         <Calendar size={20} className="text-[#F5A623]" /> 48h Flexible Window
+                      </div>
+                   </div>
+                   <button onClick={() => { setView('booking'); window.scrollTo(0,0); }} className="w-full bg-[#0F3D3E] text-white py-8 rounded-[2rem] font-black uppercase text-[0.8rem] tracking-widest shadow-xl hover:bg-[#F5A623] transition-all transform hover:-translate-y-1">
+                      Request Booking
+                   </button>
+                   <div className="mt-8 pt-8 border-t border-stone-50 flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-stone-400">
+                         <Info size={20} />
+                      </div>
+                      <p className="text-[0.6rem] text-stone-400 font-bold uppercase leading-relaxed">
+                         No payment required at this stage. Our concierge will review your travel dates first.
+                      </p>
+                   </div>
                 </div>
-              </div>
+              </aside>
             </div>
           </section>
         )}
 
+        {/* BOOKING VIEW */}
         {view === 'booking' && (
           <section className="pt-12 pb-32 px-6"><BookingForm tour={selectedTour} onSubmit={handleBooking} onCancel={() => setView('home')} isSubmitting={isSubmitting} /></section>
         )}
 
+        {/* SUCCESS VIEW */}
         {view === 'success' && (
           <section className="py-72 text-center animate-fade-in px-10"><div className="w-32 h-32 bg-[#F5A623] rounded-full flex items-center justify-center mx-auto mb-16 shadow-2xl"><CheckCircle className="text-white" size={72} /></div><h2 className="text-7xl md:text-[11rem] font-black text-[#0F3D3E] uppercase tracking-tighter leading-none mb-12">Confirmed.</h2><p className="text-3xl text-stone-500 max-w-2xl mx-auto font-medium leading-relaxed">Your tour has been secured. Our concierge will be in touch shortly with your boarding credentials.</p><button onClick={() => { setView('home'); window.scrollTo(0,0); }} className="mt-20 bg-[#0F3D3E] text-white px-20 py-9 rounded-full font-black uppercase transition-all hover:bg-[#F5A623] shadow-2xl tracking-[0.3em] text-base">Return Home</button></section>
         )}
 
+        {/* ABOUT VIEW */}
         {view === 'about' && (
-          <section className="pt-12 pb-32 px-6 md:px-12 max-w-4xl mx-auto animate-fade-in text-left text-white">
+          <section className="pt-12 pb-32 px-6 md:px-12 max-w-4xl mx-auto animate-fade-in text-left">
             <span className="text-[#F5A623] text-[0.6rem] font-bold uppercase tracking-[0.4em] mb-4 block">Founded 1994</span>
             <h1 className="text-7xl font-black text-[#0F3D3E] uppercase tracking-tighter mb-12 leading-none">Our Heritage.</h1>
             <p className="text-3xl text-[#0F3D3E] font-bold leading-tight mb-16 border-l-[12px] border-[#F5A623] pl-12">Niagara Tours was born from a simple realization: the world's most powerful natural wonder deserved a sophisticated audience.</p>
@@ -625,6 +732,7 @@ export default function App() {
           </section>
         )}
 
+        {/* CONTACT VIEW */}
         {view === 'contact' && (
           <section className="pt-12 pb-32 px-6 md:px-12 max-w-[1440px] mx-auto animate-fade-in text-left">
             <h1 className="text-8xl md:text-[10rem] font-black text-[#0F3D3E] uppercase tracking-tighter mb-24 leading-none">Concierge.</h1>
