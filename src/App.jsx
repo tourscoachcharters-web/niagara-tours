@@ -29,14 +29,18 @@ const db = getFirestore(app);
 
 const SafeImage = ({ src, alt, className, style }) => {
   const [error, setError] = useState(false);
-  // If it's an external Unsplash link, we clean it. If it's a local path like "/hero.jpg", we use it directly.
-  const cleanSrc = (src && src.includes('unsplash.com')) ? src.split('?')[0] + "?auto=format&w=1200&q=75" : src;
+  
+  // Robust check for local vs external
+  const isExternal = src && (src.startsWith('http') || src.includes('unsplash.com'));
+  const cleanSrc = (isExternal && src.includes('unsplash.com')) ? src.split('?')[0] + "?auto=format&w=1200&q=75" : src;
   
   if (!src || error) {
     return (
       <div className={`${className} bg-stone-200 flex flex-col items-center justify-center p-4`} style={style}>
         <ImageIcon className="text-stone-400 mb-2" size={32} />
-        <span className="text-[0.6rem] font-bold text-stone-500 uppercase">Image Unavailable</span>
+        <span className="text-[0.6rem] font-bold text-stone-500 uppercase tracking-widest text-center">
+          Upload {src?.replace('/', '') || 'Image'}
+        </span>
       </div>
     );
   }
@@ -94,7 +98,7 @@ const Nav = ({ setView, activeView }) => {
         </div>
       </div>
       {isOpen && (
-        <div className="xl:hidden absolute top-full left-0 w-full bg-[#0F3D3E] shadow-2xl p-8 border-t border-white/5 flex flex-col gap-6 animate-fade-in text-left">
+        <div className="xl:hidden absolute top-full left-0 w-full bg-[#0F3D3E] shadow-2xl p-8 border-t border-white/5 flex flex-col gap-6 animate-fade-in text-left text-white">
           {links.map(link => (
             <button key={link.id} onClick={() => handleNav(link.id)} className={`text-left text-xl font-black uppercase tracking-tighter ${activeView === link.id ? 'text-[#F5A623]' : 'text-white/70'}`}>{link.label}</button>
           ))}
@@ -187,7 +191,7 @@ export default function App() {
     const toursCollection = collection(db, 'artifacts', appId, 'public', 'data', 'tours');
     return onSnapshot(toursCollection, (snap) => {
       if (snap.empty) {
-        // --- SEED DATA WITH LOCAL IMAGE PATHS ---
+        // --- DUMMY LOCAL PATH SEED DATA ---
         const seed = [
           { name: "The Grand Estate", price: 129, category: "Heritage", capacity: 48, duration: "9 Hours", description: "A flagship full-day journey through historic villages and the mighty Falls.", itinerary: ["Toronto Departure", "Niagara-on-the-Lake Stop", "Winery Tasting", "Falls Illumination Viewing"], image: "/tour-1.jpg" },
           { name: "Sunset Illumination", price: 159, category: "Culinary", capacity: 24, duration: "6 Hours", description: "Witness the falls at twilight followed by a curated three-course dinner.", itinerary: ["Afternoon Departure", "Table Rock Scenic Stop", "Gourmet Dinner", "Light Show Experience"], image: "/tour-2.jpg" },
@@ -229,7 +233,6 @@ export default function App() {
           <>
             <section className="relative w-full overflow-hidden bg-black">
               <div className="relative h-[85vh] w-full">
-                {/* --- LOCAL HERO IMAGE PATH --- */}
                 <SafeImage src="/hero.jpg" className="absolute inset-0 w-full h-full object-cover" style={{ filter: 'brightness(0.4)' }} />
                 <div className="relative z-10 w-full h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-center text-left animate-slide-up">
                   <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-12">
@@ -251,9 +254,9 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-                <div className="absolute bottom-12 right-12 text-right hidden xl:block text-white/60">
-                  <div className="mb-6"><p className="text-[0.6rem] font-black uppercase tracking-widest text-[#F5A623]">Location</p><p className="text-xs font-bold font-mono">43.0896° N, 79.0849° W</p></div>
-                  <div><p className="text-[0.6rem] font-black uppercase tracking-widest text-[#F5A623]">Flow Speed</p><p className="text-xs font-bold font-mono uppercase">65 KM / HOUR (PEAK)</p></div>
+                <div className="absolute bottom-12 right-12 text-right hidden xl:block text-white/60 text-left">
+                  <div className="mb-6"><p className="text-[0.6rem] font-black uppercase tracking-widest text-[#F5A623]">Location</p><p className="text-xs font-bold font-mono text-white">43.0896° N, 79.0849° W</p></div>
+                  <div><p className="text-[0.6rem] font-black uppercase tracking-widest text-[#F5A623]">Flow Speed</p><p className="text-xs font-bold font-mono uppercase text-white">65 KM / HOUR (PEAK)</p></div>
                 </div>
               </div>
             </section>
