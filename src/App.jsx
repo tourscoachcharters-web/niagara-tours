@@ -284,7 +284,8 @@ export default function App() {
                 <SafeImage src="https://images.unsplash.com/photo-1473116763249-2faaef81ccda" className="absolute inset-0 w-full h-full object-cover" style={{ filter: 'brightness(0.4)' }} />
                 <div className="relative z-10 w-full h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-center text-left animate-slide-up">
                   
-                  <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-12">
+                  {/* ADJUSTED: Changed xl:items-end to xl:items-center to move the card up relative to the text row */}
+                  <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-12">
                     <div className="max-w-4xl pt-10">
                       <h1 className="text-white font-black text-6xl md:text-[9.5rem] uppercase leading-[0.8] tracking-tighter mb-10">
                         Primal <br/><span className="text-[#F5A623]">Energy.</span>
@@ -302,7 +303,8 @@ export default function App() {
                       </div>
                     </div>
 
-                    <div className="hidden lg:block bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] p-12 max-w-md">
+                    {/* ADJUSTED: Added transform translate-y-[-50px] (xl:-translate-y-24) to move it up and reveal info below */}
+                    <div className="hidden lg:block bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] p-12 max-w-md transform xl:-translate-y-24 shadow-2xl transition-transform">
                       <div className="flex items-center gap-3 text-[#F5A623] mb-6">
                         <Waves size={24} />
                         <span className="font-black uppercase tracking-widest text-sm">The Hydropower Legacy</span>
