@@ -359,7 +359,8 @@ export default function App() {
       if (snap.empty) {
         const seed = [
           { name: "James W.", rating: 5, comment: "The helicopter ride was breathtaking! I've lived in Toronto for 10 years and never seen the Falls like this. Truly luxury service from start to finish.", createdAt: serverTimestamp() },
-          { name: "Sarah L.", rating: 5, comment: "Excellent wine selection on the Sommelier tour. Our guide was incredibly knowledgeable. The farm-to-table lunch was a highlight of our trip.", createdAt: serverTimestamp() }
+          { name: "Sarah L.", rating: 5, comment: "Excellent wine selection on the Sommelier tour. Our guide was incredibly knowledgeable. The farm-to-table lunch was a highlight of our trip.", createdAt: serverTimestamp() },
+          { name: "Michael R.", rating: 5, comment: "Bespoke service at its finest. They arranged a private sunset dinner on a vineyard that we will never forget.", createdAt: serverTimestamp() }
         ];
         seed.forEach(r => addDoc(reviewsCollection, r));
       } else {
@@ -468,6 +469,20 @@ export default function App() {
                     <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-stone-800"><SafeImage src="/bespoke-4.jpg" className="w-full h-full object-cover opacity-80" /></div>
                   </div>
                 </div>
+              </div>
+            </section>
+
+            {/* CURRENT REVIEWS SECTION */}
+            <section className="py-32 px-6 md:px-12 max-w-[1440px] mx-auto text-left bg-stone-50/50">
+              <header className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+                <div className="text-left">
+                  <span className="text-[#F5A623] text-[0.6rem] font-bold uppercase tracking-[0.4em] mb-4 block">Verified Experiences</span>
+                  <h2 className="text-5xl font-black text-[#0F3D3E] uppercase tracking-tighter leading-none">Voices of Discovery</h2>
+                </div>
+                <button onClick={() => setView('reviews')} className="flex items-center gap-2 text-[#0F3D3E] font-bold uppercase text-[0.65rem] tracking-widest group">Read Full Stories <ArrowRight size={16} className="transition-transform group-hover:translate-x-2" /></button>
+              </header>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                {reviews.slice(0, 3).map(r => <ReviewCard key={r.id} review={r} />)}
               </div>
             </section>
           </>
