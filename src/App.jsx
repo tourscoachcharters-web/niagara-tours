@@ -342,6 +342,7 @@ export default function App() {
                 </div>
               </div>
             </section>
+            
             <section className="py-32 px-6 md:px-12 max-w-[1440px] mx-auto">
               <header className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
                 <div className="text-left"><span className="text-[#F5A623] text-[0.6rem] font-bold uppercase tracking-[0.4em] mb-4 block">Hand-Selected Itineraries</span><h2 className="text-5xl font-black text-[#0F3D3E] uppercase tracking-tighter leading-none">Signature Sightseeing</h2></div>
@@ -349,6 +350,22 @@ export default function App() {
               </header>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {tours.slice(0, 6).map(t => <TourCard key={t.id} tour={t} onSelect={(tour) => { setSelectedTour(tour); setView('detail'); window.scrollTo(0,0); }} />)}
+              </div>
+            </section>
+
+            {/* REVIEWS SECTION FOR HOME PAGE */}
+            <section className="py-32 px-6 md:px-12 max-w-[1440px] mx-auto text-left bg-stone-50/50 border-y border-stone-100">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+                <div className="text-left">
+                  <span className="text-[#F5A623] text-[0.6rem] font-bold uppercase tracking-[0.4em] mb-4 block">Guest Testimonials</span>
+                  <h2 className="text-5xl font-black text-[#0F3D3E] uppercase tracking-tighter leading-none">Voices of Discovery</h2>
+                </div>
+                <button onClick={() => setView('reviews')} className="flex items-center gap-2 text-[#0F3D3E] font-bold uppercase text-[0.65rem] tracking-widest group">
+                  Read All Stories <ArrowRight size={16} className="transition-transform group-hover:translate-x-2" />
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                {reviews.slice(0, 3).map(r => <ReviewCard key={r.id} review={r} />)}
               </div>
             </section>
 
@@ -582,7 +599,7 @@ export default function App() {
 
         {/* BOOKING VIEW */}
         {view === 'booking' && (
-          <section className="py-12 pb-32 px-6"><BookingForm tour={selectedTour} onSubmit={handleBooking} onCancel={() => setView('home')} isSubmitting={isSubmitting} /></section>
+          <section className="pt-12 pb-32 px-6"><BookingForm tour={selectedTour} onSubmit={handleBooking} onCancel={() => setView('home')} isSubmitting={isSubmitting} /></section>
         )}
 
         {/* SUCCESS VIEW */}
