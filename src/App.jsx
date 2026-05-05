@@ -10,7 +10,8 @@ import {
   Calendar, CreditCard, Camera, Leaf, Play,
   Coffee, Wine, Map, Sparkles, Utensils, HelpCircle,
   Plus, MessageSquare, Quote, Info, ExternalLink,
-  Gem, Heart, Building, PartyPopper, ChevronRight
+  Gem, Heart, Building, PartyPopper, ChevronRight,
+  Zap, Award, Globe
 } from 'lucide-react';
 
 // --- FIREBASE CONFIG ---
@@ -414,7 +415,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDF9] flex flex-col font-sans selection:bg-[#F5A623]/30 pt-[100px] text-left">
+    <div className="min-h-screen bg-[#FDFDF9] flex flex-col font-sans selection:bg-[#F5A623]/30 pt-[100px] text-left overflow-x-hidden">
       <MetaTags view={view} tourName={selectedTour?.name} />
       <Nav setView={setView} activeView={view} />
       
@@ -422,19 +423,81 @@ export default function App() {
         {/* HOME VIEW */}
         {view === 'home' && (
           <>
-            <section className="relative w-full overflow-hidden bg-black">
-              <div className="relative h-[85vh] w-full">
-                <SafeImage src="/hero.jpg" alt="Luxury Niagara Falls Tours Canada" className="absolute inset-0 w-full h-full object-cover" style={{ filter: 'brightness(0.4)' }} />
-                <div className="relative z-10 w-full h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-center animate-slide-up">
-                  <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-12">
-                    <div className="max-w-4xl pt-10">
-                      <h1 className="text-white font-black text-6xl md:text-[9.5rem] uppercase leading-[0.8] tracking-tighter mb-10">Luxury <br/><span className="text-[#F5A623]">Niagara.</span></h1>
-                      <p className="text-white/90 text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mb-12">Experience the <span className="text-[#F5A623] font-bold">best Niagara Falls tours from Toronto</span>. Luxury small-group sightseeing with VIP access to Hornblower cruises and bespoke itineraries.</p>
-                      <div className="flex flex-wrap gap-6">
-                        <button onClick={() => setView('tours')} className="bg-[#F5A623] text-black px-12 py-5 rounded-xl font-black uppercase text-[0.8rem] tracking-[0.2em] shadow-2xl hover:bg-white transition-all">Book Tour</button>
-                        <button onClick={() => setView('enquiry')} className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-12 py-5 rounded-xl font-black uppercase text-[0.8rem] tracking-[0.2em] hover:bg-white/20 transition-all flex items-center gap-3">Bespoke Inquiry</button>
-                      </div>
+            <section className="relative w-full h-[95vh] overflow-hidden bg-black">
+              {/* Background with Zoom Animation */}
+              <div className="absolute inset-0 z-0 scale-105 animate-ken-burns">
+                <SafeImage src="/hero.jpg" alt="Luxury Niagara Falls Tours" className="w-full h-full object-cover" style={{ filter: 'brightness(0.4) contrast(1.1)' }} />
+              </div>
+
+              {/* Gradient Overlay for Text Readability */}
+              <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/60 via-black/20 to-transparent"></div>
+
+              {/* Decorative Elements */}
+              <div className="absolute top-1/4 -right-24 w-96 h-96 bg-[#F5A623]/10 rounded-full blur-[120px] z-10"></div>
+              
+              <div className="relative z-20 w-full h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-center">
+                <div className="max-w-5xl animate-slide-up-slow">
+                  
+                  {/* Floating Trust Badge */}
+                  <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 mb-10 shadow-2xl">
+                    <div className="w-6 h-6 rounded-full bg-[#F5A623] flex items-center justify-center">
+                      <Award size={14} className="text-white" />
                     </div>
+                    <span className="text-white text-[0.65rem] font-black uppercase tracking-[0.2em]">Toronto's #1 Rated Luxury Experience</span>
+                  </div>
+
+                  <h1 className="text-white font-black text-7xl md:text-[10rem] lg:text-[12rem] uppercase leading-[0.75] tracking-tighter mb-12 drop-shadow-2xl">
+                    Majesty <br/>
+                    <span className="text-[#F5A623] flex items-center gap-8">
+                      Niagara.
+                      <div className="hidden md:block w-32 lg:w-48 h-px bg-white/30"></div>
+                    </span>
+                  </h1>
+
+                  <p className="text-white/80 text-xl md:text-3xl font-medium leading-tight max-w-2xl mb-16 tracking-tight">
+                    Step into a world of <span className="text-[#F5A623] font-bold">curated discovery</span>. Premium small-group excursions from Toronto with VIP access to the world's most powerful natural wonder.
+                  </p>
+
+                  <div className="flex flex-wrap gap-8 items-center">
+                    <button 
+                      onClick={() => setView('tours')} 
+                      className="group relative bg-[#F5A623] text-black px-12 py-6 rounded-2xl font-black uppercase text-[0.85rem] tracking-[0.2em] shadow-[0_20px_50px_rgba(245,166,35,0.3)] hover:bg-white transition-all overflow-hidden"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">Book Experience <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" /></span>
+                    </button>
+                    
+                    <button 
+                      onClick={() => setView('enquiry')} 
+                      className="group flex items-center gap-4 bg-white/5 backdrop-blur-xl text-white border border-white/20 px-10 py-6 rounded-2xl font-black uppercase text-[0.8rem] tracking-[0.2em] hover:bg-white hover:text-black transition-all"
+                    >
+                      <Globe size={18} className="group-hover:rotate-12 transition-transform" /> Bespoke Inquiry
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status Strip at Bottom */}
+              <div className="absolute bottom-0 left-0 w-full z-20 py-8 bg-black/20 backdrop-blur-sm border-t border-white/5">
+                <div className="max-w-[1440px] mx-auto px-12 flex flex-col md:flex-row justify-between items-center gap-8">
+                  <div className="flex items-center gap-8">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                      <span className="text-white/40 text-[0.6rem] font-bold uppercase tracking-[0.3em]">Operational: All Sites Open</span>
+                    </div>
+                    <div className="h-4 w-px bg-white/10 hidden md:block"></div>
+                    <div className="flex items-center gap-3">
+                      <Zap size={14} className="text-[#F5A623]" />
+                      <span className="text-white/40 text-[0.6rem] font-bold uppercase tracking-[0.3em]">VIP Fast-Track Active</span>
+                    </div>
+                  </div>
+                  
+                  {/* Floating Action Hint */}
+                  <div className="animate-bounce text-white/30 hidden lg:block">
+                    <ChevronDown size={24} />
+                  </div>
+
+                  <div className="flex items-center gap-6">
+                    <span className="text-white/20 text-[0.6rem] font-black uppercase tracking-[0.4em]">Next Departure: 08:30 AM Tomorrow</span>
                   </div>
                 </div>
               </div>
@@ -451,7 +514,7 @@ export default function App() {
             </section>
 
             {/* BESPOKE CTA */}
-            <section className="py-32 bg-[#0F3D3E] text-white">
+            <section className="py-32 bg-[#0F3D3E] text-white overflow-hidden">
               <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-24 items-center">
                 <div className="relative">
                   <div className="absolute -top-12 -left-12 w-64 h-64 bg-[#F5A623]/20 rounded-full blur-[100px]"></div>
@@ -459,7 +522,8 @@ export default function App() {
                   <p className="text-xl text-white/60 mb-12 max-w-md">Looking for something more exclusive? Our Bespoke team creates private charters and curated culinary journeys designed specifically for your group.</p>
                   <button onClick={() => setView('enquiry')} className="bg-[#F5A623] text-black px-12 py-5 rounded-full font-black uppercase text-[0.8rem] tracking-[0.2em] hover:bg-white transition-all flex items-center gap-3">Explore Bespoke Services <ArrowRight size={20}/></button>
                 </div>
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-6 relative">
+                  <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-[#F5A623]/5 rounded-full blur-[120px]"></div>
                   <div className="space-y-6 pt-12">
                     <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-stone-800"><SafeImage src="/bespoke-1.jpg" className="w-full h-full object-cover opacity-80" /></div>
                     <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-stone-800"><SafeImage src="/bespoke-2.jpg" className="w-full h-full object-cover opacity-80" /></div>
@@ -669,13 +733,25 @@ export default function App() {
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes slide-up { from { opacity: 0; transform: translateY(80px); } to { opacity: 1; transform: translateY(0); } }
         .animate-slide-up { animation: slide-up 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        @keyframes slide-up-slow { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide-up-slow { animation: slide-up-slow 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes ken-burns { 
+          from { transform: scale(1.05); } 
+          to { transform: scale(1.15); } 
+        }
+        .animate-ken-burns { animation: ken-burns 20s linear infinite alternate; }
+
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
         .animate-fade-in { animation: fade-in 1.2s ease-out forwards; }
+        
         @keyframes bounce-horizontal { 
           0%, 100% { transform: translate(-5px, -50%); } 
           50% { transform: translate(5px, -50%); } 
         }
         .animate-bounce-horizontal { animation: bounce-horizontal 2s ease-in-out infinite; }
+        
         body { scroll-behavior: smooth; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
