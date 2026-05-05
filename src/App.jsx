@@ -10,7 +10,7 @@ import {
   Calendar, CreditCard, Camera, Leaf, Play,
   Coffee, Wine, Map, Sparkles, Utensils, HelpCircle,
   Plus, MessageSquare, Quote, Info, ExternalLink,
-  Gem, Heart, Building, PartyPopper
+  Gem, Heart, Building, PartyPopper, ChevronRight
 } from 'lucide-react';
 
 // --- FIREBASE CONFIG ---
@@ -472,7 +472,7 @@ export default function App() {
               </div>
             </section>
 
-            {/* CURRENT REVIEWS SECTION WITH MOBILE SLIDER */}
+            {/* CURRENT REVIEWS SECTION WITH MOBILE SLIDER & ARROW HINT */}
             <section className="py-32 px-6 md:px-12 max-w-[1440px] mx-auto text-left bg-stone-50/50">
               <header className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
                 <div className="text-left">
@@ -482,13 +482,23 @@ export default function App() {
                 <button onClick={() => setView('reviews')} className="flex items-center gap-2 text-[#0F3D3E] font-bold uppercase text-[0.65rem] tracking-widest group">Read Full Stories <ArrowRight size={16} className="transition-transform group-hover:translate-x-2" /></button>
               </header>
               
-              {/* Responsive Container: Flex Slider on Mobile, Grid on Desktop */}
-              <div className="flex md:grid md:grid-cols-3 gap-8 md:gap-10 overflow-x-auto md:overflow-x-visible pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0">
-                {reviews.slice(0, 3).map(r => (
-                  <div key={r.id} className="min-w-[85vw] md:min-w-0 snap-center">
-                    <ReviewCard review={r} />
+              <div className="relative">
+                {/* Visual Guide: Floating Arrow for Mobile */}
+                <div className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-20 pointer-events-none flex flex-col items-center gap-2 pr-2 animate-bounce-horizontal">
+                  <div className="bg-[#F5A623] p-3 rounded-full shadow-2xl text-white">
+                    <ChevronRight size={20} />
                   </div>
-                ))}
+                  <span className="text-[0.55rem] font-black uppercase tracking-widest text-[#0F3D3E]/40">Swipe</span>
+                </div>
+
+                {/* Responsive Container: Flex Slider on Mobile, Grid on Desktop */}
+                <div className="flex md:grid md:grid-cols-3 gap-8 md:gap-10 overflow-x-auto md:overflow-x-visible pb-12 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0">
+                  {reviews.slice(0, 3).map(r => (
+                    <div key={r.id} className="min-w-[85vw] md:min-w-0 snap-center">
+                      <ReviewCard review={r} />
+                    </div>
+                  ))}
+                </div>
               </div>
             </section>
           </>
@@ -661,6 +671,11 @@ export default function App() {
         .animate-slide-up { animation: slide-up 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
         .animate-fade-in { animation: fade-in 1.2s ease-out forwards; }
+        @keyframes bounce-horizontal { 
+          0%, 100% { transform: translate(-5px, -50%); } 
+          50% { transform: translate(5px, -50%); } 
+        }
+        .animate-bounce-horizontal { animation: bounce-horizontal 2s ease-in-out infinite; }
         body { scroll-behavior: smooth; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
