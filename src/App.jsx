@@ -435,7 +435,7 @@ export default function App() {
               {/* Decorative Elements */}
               <div className="absolute top-1/4 -right-24 w-96 h-96 bg-[#F5A623]/10 rounded-full blur-[120px] z-10"></div>
               
-              <div className="relative z-20 w-full h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-center">
+              <div className="relative z-30 w-full h-full max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col justify-center">
                 <div className="max-w-5xl animate-slide-up-slow">
                   
                   {/* Floating Trust Badge */}
@@ -476,9 +476,9 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Status Strip at Bottom */}
-              <div className="absolute bottom-0 left-0 w-full z-20 py-8 bg-black/20 backdrop-blur-sm border-t border-white/5">
-                <div className="max-w-[1440px] mx-auto px-12 flex flex-col md:flex-row justify-between items-center gap-8">
+              {/* Status Strip at Bottom - Fixed with pointer-events-none to prevent blocking main content clicks */}
+              <div className="absolute bottom-0 left-0 w-full z-20 py-4 md:py-8 bg-black/20 backdrop-blur-sm border-t border-white/5 pointer-events-none">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8 pointer-events-auto">
                   <div className="flex items-center gap-8">
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
