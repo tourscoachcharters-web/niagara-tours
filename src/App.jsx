@@ -9,7 +9,7 @@ import {
   Facebook, Twitter, Mail, Phone, CheckCircle,
   Calendar, CreditCard, Camera, Leaf, Play,
   Coffee, Wine, Map, Sparkles, Utensils, HelpCircle,
-  Plus, MessageSquare, Quote, Info
+  Plus, MessageSquare, Quote, Info, ExternalLink
 } from 'lucide-react';
 
 // --- FIREBASE CONFIG ---
@@ -66,7 +66,7 @@ const SafeImage = ({ src, alt, className, style }) => {
     return (
       <div className={`${className} bg-stone-200 flex flex-col items-center justify-center p-4`} style={style}>
         <ImageIcon className="text-stone-400 mb-2" size={32} />
-        <span className="text-[0.6rem] font-bold text-stone-500 uppercase tracking-widest text-center">
+        <span className="text-[0.6rem] font-bold text-stone-500 uppercase tracking-widest text-center px-4">
           Upload {src?.replace('/', '') || 'Image'}
         </span>
       </div>
@@ -244,149 +244,21 @@ export default function App() {
     return onSnapshot(toursCollection, (snap) => {
       if (snap.empty) {
         const seed = [
-          { 
-            name: "The Grand Estate", price: 129, category: "Heritage", capacity: 48, duration: "9 Hours", 
-            description: "Experience the ultimate Niagara Falls tour from Toronto. A full-day luxury sightseeing journey through historic Niagara-on-the-Lake and the Horseshoe Falls.",
-            highlights: ["Heritage Sightseeing", "Elite Vineyard Access", "Brink Observation", "Luxury Coach Transit"],
-            included: ["Certified Local Guide", "3-Course Winery Lunch", "Fast-Track Entry", "Bottled Water"],
-            itinerary: [
-              { time: "08:30 AM", event: "Toronto Departure", desc: "Board our executive coach for a luxury day trip to Niagara Falls." },
-              { time: "10:30 AM", event: "Niagara-on-the-Lake", desc: "Explore Canada's most historic and beautiful town." },
-              { time: "12:30 PM", event: "Gourmet Lunch", desc: "Seated dining at a premier Niagara vineyard." },
-              { time: "03:00 PM", event: "Falls Experience", desc: "Unobstructed views from the brink of the Falls." }
-            ],
-            faqs: [{ q: "Are tours from Toronto daily?", a: "Yes, we offer premium daily departures from Union Station and major hotels." }],
-            image: "/tour-1.jpg" 
-          },
-          { 
-            name: "Sunset Illumination", price: 159, category: "Culinary", capacity: 24, duration: "6 Hours",
-            description: "The best Niagara Falls night tour. Watch the illumination show after a gourmet dinner with unobstructed Falls views.",
-            highlights: ["Night Light Show", "Golden Hour Views", "Fine Dining Experience", "Luxury Chauffeur"],
-            included: ["Fallsview Seating", "Illumination Access", "Gourmet Dinner", "VIP Scenic View"],
-            itinerary: [
-              { time: "03:30 PM", event: "Afternoon Pickup", desc: "Luxury transit to the Falls for the sunset transition." },
-              { time: "07:00 PM", event: "Fallsview Dinner", desc: "High-end dining with the world's best waterfall view." }
-            ],
-            faqs: [{ q: "Is this tour romantic?", a: "It is our #1 rated tour for couples and special occasions in Niagara." }],
-            image: "/tour-2.jpg" 
-          },
-          { 
-            name: "Aerial Majesty", price: 499, category: "Luxury", capacity: 4, duration: "2 Hours",
-            description: "Private Niagara Falls helicopter tours. Discover the most powerful natural wonder in Canada from the air.",
-            highlights: ["Private Flight", "Champagne Welcome", "Glass-Top Views", "Executive Pickup"],
-            included: ["Helicopter Charter", "Limo Pickup", "Vintage Champagne", "Private Concierge"],
-            itinerary: [{ time: "11:00 AM", event: "The Flight", desc: "A 45-minute grand flight over the Niagara River and Whirlpool." }],
-            faqs: [{ q: "Is motion sickness common?", a: "Our pilots use stable flight paths for maximum passenger comfort." }],
-            image: "/tour-3.jpg" 
-          },
-          { 
-            name: "Winter Wonderland", price: 149, category: "Seasonal", capacity: 12, duration: "7 Hours",
-            description: "A specialized winter tour to witness the Falls transformed into a cathedral of ice.",
-            highlights: ["Frozen Falls Observation", "Festival of Lights", "Winter Vineyard Tour", "Heated Transit"],
-            included: ["Thermal Blankets", "Hot Artisan Cider", "Professional Photographer", "Icewine Tasting"],
-            itinerary: [{ time: "01:00 PM", event: "Frozen Crest", desc: "View the massive icicles forming at the brink of the falls." }],
-            faqs: [{ q: "How cold is it?", a: "Temperatures can reach -15°C; we recommend full winter gear." }],
-            image: "/tour-4.jpg" 
-          },
-          { 
-            name: "Adventure Tour", price: 189, category: "Adventure", capacity: 20, duration: "5 Hours",
-            description: "Designed for those who want to feel the kinetic energy and mist of the rapids.",
-            highlights: ["Hornblower VIP Entry", "Cave of the Winds", "Whirlpool Aero Car", "Class 6 Rapids"],
-            included: ["Recyclable Rain Gear", "Priority Attraction Pass", "Action Guide", "Energy Refreshments"],
-            itinerary: [{ time: "10:30 AM", event: "Hornblower Voyage", desc: "A boat journey directly into the heart of the mist." }],
-            faqs: [{ q: "Will I get wet?", a: "Yes, you will get very wet. We provide heavy-duty ponchos." }],
-            image: "/tour-5.jpg" 
-          },
-          { 
-            name: "Sommelier's Route", price: 249, category: "Culinary", capacity: 8, duration: "8 Hours",
-            description: "A masterclass in terroir. Visit the private cellars of the region's top producers.",
-            highlights: ["Private Library Tasting", "Terroir Masterclass", "Cellar Master Meet", "Vineyard Walk"],
-            included: ["Level 3 Sommelier", "Tasting Fees Included", "Farm-to-Table Lunch", "Bespoke Glassware"],
-            itinerary: [{ time: "11:30 AM", event: "Estate #1", desc: "Private library tasting of aged VQA vintages." }],
-            faqs: [{ q: "Can I buy wine?", a: "Yes, we provide safe storage in the vehicle for purchases." }],
-            image: "/tour-6.jpg" 
-          },
-          { 
-            name: "The Midnight Gala", price: 799, category: "Private", capacity: 4, duration: "4 Hours",
-            description: "The peak of exclusivity. Private midnight limousine to a reserved fireworks balcony.",
-            highlights: ["Stretch Limousine", "Private Balcony", "Krug Champagne", "Midnight Dining"],
-            included: ["Personal Security", "Private Chef Service", "Premium Open Bar", "Direct Home Dropoff"],
-            itinerary: [{ time: "10:30 PM", event: "Private Rooftop", desc: "Access to a restricted balcony overlooking the brink." }],
-            faqs: [{ q: "Is there a dress code?", a: "Formal or semi-formal attire is required for this expedition." }],
-            image: "/tour-7.jpg" 
-          },
-          { 
-            name: "Historic Forts Tour", price: 119, category: "Heritage", capacity: 32, duration: "7 Hours",
-            description: "A focused military history tour of the sites that shaped the border in 1812.",
-            highlights: ["Musket Drills", "Fort Erie Siege Walk", "War of 1812 History", "Cannon Firing"],
-            included: ["Historian Guide", "Period-Authentic Lunch", "Entrance Fees", "Educational Pack"],
-            itinerary: [{ time: "10:00 AM", event: "Old Fort Erie", desc: "Explore Canada's bloodiest battlefield." }],
-            faqs: [{ q: "Are guns fired?", a: "Yes, blank-fire musket and cannon demonstrations occur regularly." }],
-            image: "/tour-8.jpg" 
-          },
-          { 
-            name: "Nature's Sanctuary", price: 139, category: "Eco", capacity: 14, duration: "6 Hours",
-            description: "Explore the hidden Carolinian flora and ancient rock formations of the Glen.",
-            highlights: ["Butterfly Conservatory", "Glen Nature Hike", "Botanical Gardens", "Organic Picnic"],
-            included: ["Botanist Expert", "Organic Picnic Lunch", "Electric Shuttle", "Butterfly Passport"],
-            itinerary: [{ time: "12:00 PM", event: "Glen Hike", desc: "A guided moderate hike through preclinical gorge trails." }],
-            faqs: [{ q: "Is the hike steep?", a: "Yes, there are stone stairs; sturdy shoes are required." }],
-            image: "/tour-9.jpg" 
-          },
-          { 
-            name: "Photographer's Lens", price: 299, category: "Luxury", capacity: 6, duration: "5 Hours",
-            description: "Master long-exposure shots with access to tripod-friendly restricted vantage points.",
-            highlights: ["Restricted Point Access", "Light Coaching", "Blue Hour Training", "Long-Exposure Skills"],
-            included: ["Pro Tripod Rental", "Photography permits", "Field Workshop", "High-Speed Transit"],
-            itinerary: [{ time: "05:30 PM", event: "Golden Hour Shoot", desc: "Capturing the rapids from a private cliff edge." }],
-            faqs: [{ q: "Do I need a pro camera?", a: "A camera with manual mode (DSLR/Mirrorless) is recommended." }],
-            image: "/tour-10.jpg" 
-          },
-          { 
-            name: "Behind the Thunder", price: 169, category: "Adventure", capacity: 16, duration: "4 Hours",
-            description: "Deep dive into the bedrock tunnels directly behind the massive water wall.",
-            highlights: ["Tunnel Exploration", "Mist Immersion", "Geological Briefing", "Portal Views"],
-            included: ["Yellow Poncho Service", "Cave Access Pass", "Seismology Guide", "Safety Briefing"],
-            itinerary: [{ time: "11:00 AM", event: "Tunnel Entry", desc: "Entering the bedrock 150 feet below ground." }],
-            faqs: [{ q: "Is it loud?", a: "Yes, the thunder of the water is intense and powerful." }],
-            image: "/tour-11.jpg" 
-          },
-          { 
-            name: "Gourmet Parkway Picnic", price: 145, category: "Culinary", capacity: 10, duration: "5 Hours",
-            description: "A slow-paced luxury drive along the world-renowned Niagara Parkway with a chef-prepared picnic.",
-            highlights: ["Scenic River Drive", "Custom Picnic Setup", "Floriculture Tour", "Gourmet Hamper"],
-            included: ["Chef-Prepared Basket", "Blanket & Pillow Service", "Parkway Transit", "Champagne Bottle"],
-            itinerary: [{ time: "01:00 PM", event: "River Picnic", desc: "Dining at a secluded riverside location." }],
-            faqs: [{ q: "Can dietary needs be met?", a: "Yes, we customize baskets for vegan, GF, and keto guests." }],
-            image: "/tour-12.jpg" 
-          },
-          { 
-            name: "Whirlpool Jet Boat", price: 195, category: "Adventure", capacity: 22, duration: "3 Hours",
-            description: "High-octane power boating through the devil’s hole rapids. The ultimate thrill ride.",
-            highlights: ["Class 5 Rapids", "Wet Jet Action", "Power Thrills", "River Gorge Speed"],
-            included: ["Safety Vest", "Full Wet Suit", "Professional Captain", "River Safety Brief"],
-            itinerary: [{ time: "02:00 PM", event: "Rapid Charge", desc: "Navigating the standing waves of the Whirlpool." }],
-            faqs: [{ q: "Will I fall out?", a: "No, our boats are engineered for stability and safety." }],
-            image: "/tour-13.jpg" 
-          },
-          { 
-            name: "Romance of the Mist", price: 349, category: "Luxury", capacity: 2, duration: "3 Hours",
-            description: "A private curated tour for couples featuring hidden viewpoints and a professional portrait session.",
-            highlights: ["Private Portraits", "Secluded Viewpoints", "Lover's Bridge Walk", "Luxury Sedan"],
-            included: ["Pro Photographer", "High-Res Digital Files", "Flowers & Chocolates", "Private Chauffeur"],
-            itinerary: [{ time: "06:00 PM", event: "Sunset Shoot", desc: "Professional portraits with the Falls as your backdrop." }],
-            faqs: [{ q: "When do we get photos?", a: "Edited digital files are delivered within 48 hours." }],
-            image: "/tour-14.jpg" 
-          },
-          { 
-            name: "Indigenous Heritage", price: 135, category: "Heritage", capacity: 20, duration: "6 Hours",
-            description: "Learn the ancient history of the Niagara region through the lens of the Haudenosaunee and Anishinaabe peoples.",
-            highlights: ["Sacred Site Visits", "Traditional Storytelling", "Indigenous Art Gallery", "Historical Treaty Focus"],
-            included: ["Indigenous Cultural Guide", "Traditional Snacks", "Gallery Entrance", "Donation to Local Nations"],
-            itinerary: [{ time: "10:00 AM", event: "Sacred Falls", desc: "Hearing the creation stories of the Great Water." }],
-            faqs: [{ q: "Is it respectful?", a: "Yes, this tour is designed and led by local Indigenous guides." }],
-            image: "/tour-15.jpg" 
-          }
+          { name: "The Grand Estate", price: 129, category: "Heritage", capacity: 48, duration: "9 Hours", description: "Experience the ultimate Niagara Falls tour from Toronto. A full-day luxury sightseeing journey through historic Niagara-on-the-Lake and the Horseshoe Falls.", highlights: ["Heritage Sightseeing", "Elite Vineyard Access", "Brink Observation", "Luxury Coach Transit"], included: ["Certified Local Guide", "3-Course Winery Lunch", "Fast-Track Entry", "Bottled Water"], itinerary: [{ time: "08:30 AM", event: "Toronto Departure", desc: "Board our executive coach for a luxury day trip to Niagara Falls." }, { time: "10:30 AM", event: "Niagara-on-the-Lake", desc: "Explore Canada's most historic and beautiful town." }, { time: "12:30 PM", event: "Gourmet Lunch", desc: "Seated dining at a premier Niagara vineyard." }, { time: "03:00 PM", event: "Falls Experience", desc: "Unobstructed views from the brink of the Falls." }], faqs: [{ q: "Are tours from Toronto daily?", a: "Yes, we offer premium daily departures from Union Station and major hotels." }], image: "/tour-1.jpg" },
+          { name: "Sunset Illumination", price: 159, category: "Culinary", capacity: 24, duration: "6 Hours", description: "The best Niagara Falls night tour. Watch the illumination show after a gourmet dinner with unobstructed Falls views.", highlights: ["Night Light Show", "Golden Hour Views", "Fine Dining Experience", "Luxury Chauffeur"], included: ["Fallsview Seating", "Illumination Access", "Gourmet Dinner", "VIP Scenic View"], itinerary: [{ time: "03:30 PM", event: "Afternoon Pickup", desc: "Luxury transit to the Falls for the sunset transition." }, { time: "07:00 PM", event: "Fallsview Dinner", desc: "High-end dining with the world's best waterfall view." }], faqs: [{ q: "Is this tour romantic?", a: "It is our #1 rated tour for couples and special occasions in Niagara." }], image: "/tour-2.jpg" },
+          { name: "Aerial Majesty", price: 499, category: "Luxury", capacity: 4, duration: "2 Hours", description: "Private Niagara Falls helicopter tours. Discover the most powerful natural wonder in Canada from the air.", highlights: ["Private Flight", "Champagne Welcome", "Glass-Top Views", "Executive Pickup"], included: ["Helicopter Charter", "Limo Pickup", "Vintage Champagne", "Private Concierge"], itinerary: [{ time: "11:00 AM", event: "The Flight", desc: "A 45-minute grand flight over the Niagara River and Whirlpool." }], faqs: [{ q: "Is motion sickness common?", a: "Our pilots use stable flight paths for maximum passenger comfort." }], image: "/tour-3.jpg" },
+          { name: "Winter Wonderland", price: 149, category: "Seasonal", capacity: 12, duration: "7 Hours", description: "A specialized winter tour to witness the Falls transformed into a cathedral of ice in maximum warmth and comfort.", highlights: ["Frozen Falls Observation", "Festival of Lights", "Winter Vineyard Tour", "Heated Transit"], included: ["Thermal Blankets", "Hot Artisan Cider", "Professional Photographer", "Icewine Tasting"], itinerary: [{ time: "01:00 PM", event: "Frozen Crest", desc: "View the massive icicles forming at the brink of the falls." }, { time: "05:00 PM", event: "Light Festival", desc: "A driving tour through 3 million holiday lights." }], faqs: [{ q: "How cold is it?", a: "Temperatures can reach -15°C; we recommend full winter gear." }], image: "/tour-4.jpg" },
+          { name: "Adventure Tour", price: 189, category: "Adventure", capacity: 20, duration: "5 Hours", description: "Designed for those who want to feel the kinetic energy and mist of the rapids.", highlights: ["Hornblower VIP Entry", "Cave of the Winds", "Whirlpool Aero Car", "Class 6 Rapids"], included: ["Recyclable Rain Gear", "Priority Attraction Pass", "Action Guide", "Energy Refreshments"], itinerary: [{ time: "10:30 AM", event: "Hornblower Voyage", desc: "A boat journey directly into the heart of the mist." }, { time: "12:00 PM", event: "The Cave Walk", desc: "Stand under the Bridal Veil falls on the Hurricane Deck." }], faqs: [{ q: "Will I get wet?", a: "Yes, you will get very wet. We provide heavy-duty ponchos." }], image: "/tour-5.jpg" },
+          { name: "Sommelier's Route", price: 249, category: "Culinary", capacity: 8, duration: "8 Hours", description: "A masterclass in terroir. Visit the private cellars of the region's top producers.", highlights: ["Private Library Tasting", "Terroir Masterclass", "Cellar Master Meet", "Vineyard Walk"], included: ["Level 3 Sommelier", "Tasting Fees Included", "Farm-to-Table Lunch", "Bespoke Glassware"], itinerary: [{ time: "11:30 AM", event: "Estate #1", desc: "Private library tasting of aged VQA vintages." }, { time: "01:30 PM", event: "Chef's Lunch", desc: "A seasonal meal prepared by an estate executive chef." }], faqs: [{ q: "Can I buy wine?", a: "Yes, we provide safe storage in the vehicle for purchases." }], image: "/tour-6.jpg" },
+          { name: "The Midnight Gala", price: 799, category: "Private", capacity: 4, duration: "4 Hours", description: "The peak of exclusivity. Private midnight limousine to a reserved fireworks balcony.", highlights: ["Stretch Limousine", "Private Balcony", "Krug Champagne", "Midnight Dining"], included: ["Personal Security", "Private Chef Service", "Premium Open Bar", "Direct Home Dropoff"], itinerary: [{ time: "10:30 PM", event: "Private Rooftop", desc: "Access to a restricted balcony overlooking the brink." }, { time: "11:00 PM", event: "Gala Show", desc: "Front row fireworks with dedicated table service." }], faqs: [{ q: "Is there a dress code?", a: "Formal or semi-formal attire is required for this expedition." }], image: "/tour-7.jpg" },
+          { name: "Historic Forts Tour", price: 119, category: "Heritage", capacity: 32, duration: "7 Hours", description: "A focused military history tour of the sites that shaped the border in 1812.", highlights: ["Musket Drills", "Fort Erie Siege Walk", "War of 1812 History", "Cannon Firing"], included: ["Historian Guide", "Period-Authentic Lunch", "Entrance Fees", "Educational Pack"], itinerary: [{ time: "10:00 AM", event: "Old Fort Erie", desc: "Explore Canada's bloodiest battlefield." }], faqs: [{ q: "Are guns fired?", a: "Yes, blank-fire musket and cannon demonstrations occur regularly." }], image: "/tour-8.jpg" },
+          { name: "Nature's Sanctuary", price: 139, category: "Eco", capacity: 14, duration: "6 Hours", description: "Explore the hidden Carolinian flora and ancient rock formations of the Glen.", highlights: ["Butterfly Conservatory", "Glen Nature Hike", "Botanical Gardens", "Organic Picnic"], included: ["Botanist Expert", "Organic Picnic Lunch", "Electric Shuttle", "Butterfly Passport"], itinerary: [{ time: "12:00 PM", event: "Glen Hike", desc: "A guided moderate hike through preclinical gorge trails." }], faqs: [{ q: "Is the hike steep?", a: "Yes, there are stone stairs; sturdy shoes are required." }], image: "/tour-9.jpg" },
+          { name: "Photographer's Lens", price: 299, category: "Luxury", capacity: 6, duration: "5 Hours", description: "Master long-exposure shots with access to tripod-friendly restricted vantage points.", highlights: ["Restricted Point Access", "Light Coaching", "Blue Hour Training", "Long-Exposure Skills"], included: ["Pro Tripod Rental", "Photography permits", "Field Workshop", "High-Speed Transit"], itinerary: [{ time: "05:30 PM", event: "Golden Hour Shoot", desc: "Capturing the rapids from a private cliff edge." }], faqs: [{ q: "Do I need a pro camera?", a: "A camera with manual mode (DSLR/Mirrorless) is recommended." }], image: "/tour-10.jpg" },
+          { name: "Behind the Thunder", price: 169, category: "Adventure", capacity: 16, duration: "4 Hours", description: "Deep dive into the bedrock tunnels directly behind the massive water wall.", highlights: ["Tunnel Exploration", "Mist Immersion", "Geological Briefing", "Portal Views"], included: ["Yellow Poncho Service", "Cave Access Pass", "Seismology Guide", "Safety Briefing"], itinerary: [{ time: "11:00 AM", event: "Tunnel Entry", desc: "Entering the bedrock 150 feet below ground." }], faqs: [{ q: "Is it loud?", a: "Yes, the thunder of the water is intense and powerful." }], image: "/tour-11.jpg" },
+          { name: "Gourmet Parkway Picnic", price: 145, category: "Culinary", capacity: 10, duration: "5 Hours", description: "A slow-paced luxury drive along the world-renowned Niagara Parkway with a chef-prepared picnic.", highlights: ["Scenic River Drive", "Custom Picnic Setup", "Floriculture Tour", "Gourmet Hamper"], included: ["Chef-Prepared Basket", "Blanket & Pillow Service", "Parkway Transit", "Champagne Bottle"], itinerary: [{ time: "01:00 PM", event: "River Picnic", desc: "Dining at a secluded riverside location." }], faqs: [{ q: "Can dietary needs be met?", a: "Yes, we customize baskets for vegan, GF, and keto guests." }], image: "/tour-12.jpg" },
+          { name: "Whirlpool Jet Boat", price: 195, category: "Adventure", capacity: 22, duration: "3 Hours", description: "High-octane power boating through the devil’s hole rapids. The ultimate thrill ride.", highlights: ["Class 5 Rapids", "Wet Jet Action", "Power Thrills", "River Gorge Speed"], included: ["Safety Vest", "Full Wet Suit", "Professional Captain", "River Safety Brief"], itinerary: [{ time: "02:00 PM", event: "Rapid Charge", desc: "Navigating the standing waves of the Whirlpool." }], faqs: [{ q: "Will I get wet?", a: "No, our boats are engineered for stability and safety." }], image: "/tour-13.jpg" },
+          { name: "Romance of the Mist", price: 349, category: "Luxury", capacity: 2, duration: "3 Hours", description: "A private curated tour for couples featuring hidden viewpoints and a professional portrait session.", highlights: ["Private Portraits", "Secluded Viewpoints", "Lover's Bridge Walk", "Luxury Sedan"], included: ["Pro Photographer", "High-Res Digital Files", "Flowers & Chocolates", "Private Chauffeur"], itinerary: [{ time: "06:00 PM", event: "Sunset Shoot", desc: "Professional portraits with the Falls as your backdrop." }], faqs: [{ q: "When do we get photos?", a: "Edited digital files are delivered within 48 hours." }], image: "/tour-14.jpg" },
+          { name: "Indigenous Heritage", price: 135, category: "Heritage", capacity: 20, duration: "6 Hours", description: "Learn the ancient history of the Niagara region through the lens of the Haudenosaunee and Anishinaabe peoples.", highlights: ["Sacred Site Visits", "Traditional Storytelling", "Indigenous Art Gallery", "Historical Treaty Focus"], included: ["Indigenous Cultural Guide", "Traditional Snacks", "Gallery Entrance", "Donation to Local Nations"], itinerary: [{ time: "10:00 AM", event: "Sacred Falls", desc: "Hearing the creation stories of the Great Water." }], faqs: [{ q: "Is it respectful?", a: "Yes, this tour is designed and led by local Indigenous guides." }], image: "/tour-15.jpg" }
         ];
         seed.forEach(t => setDoc(doc(toursCollection, t.name.toLowerCase().replace(/\s+/g, '-')), t));
       } else {
@@ -479,6 +351,24 @@ export default function App() {
                 {tours.slice(0, 6).map(t => <TourCard key={t.id} tour={t} onSelect={(tour) => { setSelectedTour(tour); setView('detail'); window.scrollTo(0,0); }} />)}
               </div>
             </section>
+
+            {/* CTA SECTION */}
+            <section className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto">
+               <div className="relative h-[500px] rounded-[4rem] overflow-hidden flex items-center justify-center text-center">
+                 <SafeImage src="/cta-bg.jpg" alt="Niagara Falls Magic" className="absolute inset-0 w-full h-full object-cover" style={{ filter: 'brightness(0.5)' }} />
+                 <div className="relative z-10 p-8 md:p-16 max-w-3xl">
+                   <h2 className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight">
+                     Experience the Majesty of Niagara
+                   </h2>
+                   <p className="text-white/80 text-lg md:text-xl font-medium mb-10 leading-relaxed">
+                     From the thunderous falls to world-renowned wineries, discover breathtaking moments on Canada's most exclusive day tour.
+                   </p>
+                   <button onClick={() => setView('tours')} className="bg-white text-[#0F3D3E] px-10 py-5 rounded-full font-black uppercase text-[0.75rem] tracking-widest hover:bg-[#F5A623] hover:text-white transition-all shadow-2xl flex items-center gap-2 mx-auto group">
+                     Reserve Your Experience <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                   </button>
+                 </div>
+               </div>
+            </section>
           </>
         )}
 
@@ -497,19 +387,19 @@ export default function App() {
                          <p className="text-2xl font-black tracking-tighter uppercase">5.0 Average Rating</p>
                       </div>
                    </div>
-                   <div className="bg-[#0F3D3E] p-12 md:p-16 rounded-[4rem] text-white shadow-2xl relative overflow-hidden">
+                   <div className="bg-[#0F3D3E] p-12 md:p-16 rounded-[4rem] text-white shadow-2xl relative overflow-hidden text-left">
                       <Sparkles className="absolute -top-10 -right-10 text-white/5" size={200} />
                       <h3 className="text-3xl font-black uppercase tracking-tighter mb-8 flex items-center gap-3">
                          <MessageSquare className="text-[#F5A623]" size={28} /> Share Your Experience
                       </h3>
                       <form onSubmit={submitReview} className="space-y-6 relative z-10">
                          <div className="grid md:grid-cols-2 gap-6">
-                            <input required className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:border-[#F5A623] outline-none transition-all text-white" placeholder="Your Name" value={reviewData.name} onChange={e => setReviewData({...reviewData, name: e.target.value})} />
+                            <input required className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:border-[#F5A623] outline-none transition-all text-white placeholder-white/40" placeholder="Your Name" value={reviewData.name} onChange={e => setReviewData({...reviewData, name: e.target.value})} />
                             <select className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:border-[#F5A623] outline-none transition-all appearance-none text-white" value={reviewData.rating} onChange={e => setReviewData({...reviewData, rating: parseInt(e.target.value)})}>
                                {[5,4,3,2,1].map(n => <option key={n} value={n} className="text-black">{n} Stars</option>)}
                             </select>
                          </div>
-                         <textarea required rows="4" className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:border-[#F5A623] outline-none transition-all text-white" placeholder="Your thoughts on the tour..." value={reviewData.comment} onChange={e => setReviewData({...reviewData, comment: e.target.value})}></textarea>
+                         <textarea required rows="4" className="w-full bg-white/5 border border-white/10 p-5 rounded-2xl focus:border-[#F5A623] outline-none transition-all text-white placeholder-white/40" placeholder="Your thoughts on the tour..." value={reviewData.comment} onChange={e => setReviewData({...reviewData, comment: e.target.value})}></textarea>
                          <button disabled={isSubmitting} className="w-full bg-[#F5A623] text-black py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-white transition-all disabled:opacity-50 shadow-xl">
                             {isSubmitting ? 'Posting...' : 'Post Review'}
                          </button>
@@ -536,8 +426,7 @@ export default function App() {
 
         {/* TOUR DETAIL VIEW - MODERN MAGAZINE LAYOUT */}
         {view === 'detail' && selectedTour && (
-          <section className="animate-fade-in">
-            {/* HERO SECTION */}
+          <section className="animate-fade-in pb-32">
             <div className="relative h-[60vh] md:h-[70vh] w-full bg-black overflow-hidden">
               <SafeImage src={selectedTour.image} alt={selectedTour.name} className="w-full h-full object-cover" style={{ filter: 'brightness(0.6)' }} />
               <div className="absolute inset-0 flex items-center">
@@ -555,7 +444,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* QUICK STATS BAR OVERLAP */}
             <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative -mt-16 z-20">
                <div className="bg-white rounded-[2.5rem] shadow-2xl border border-stone-100 p-8 md:p-12 flex flex-wrap items-center justify-between gap-8">
                   <div className="flex items-center gap-6">
@@ -563,7 +451,7 @@ export default function App() {
                       <CreditCard size={28} />
                     </div>
                     <div>
-                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1">Premium Fare</p>
+                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1 text-left">Premium Fare</p>
                       <p className="text-3xl font-black text-[#0F3D3E] tracking-tighter">${selectedTour.price} <span className="text-sm font-normal text-stone-400">/ PP</span></p>
                     </div>
                   </div>
@@ -572,7 +460,7 @@ export default function App() {
                       <Clock size={28} />
                     </div>
                     <div>
-                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1">Tour Duration</p>
+                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1 text-left">Tour Duration</p>
                       <p className="text-2xl font-black text-[#0F3D3E] tracking-tighter uppercase">{selectedTour.duration}</p>
                     </div>
                   </div>
@@ -581,7 +469,7 @@ export default function App() {
                       <Users size={28} />
                     </div>
                     <div>
-                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1">Capacity</p>
+                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1 text-left">Capacity</p>
                       <p className="text-2xl font-black text-[#0F3D3E] tracking-tighter uppercase">{selectedTour.capacity} Guests</p>
                     </div>
                   </div>
@@ -591,10 +479,8 @@ export default function App() {
                </div>
             </div>
 
-            {/* MAIN CONTENT GRID */}
-            <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-32 grid grid-cols-12 gap-12 md:gap-24 relative">
-              <div className="col-span-12 lg:col-span-8 space-y-32 text-left">
-                {/* 1. THE EXPERIENCE */}
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-32 grid grid-cols-12 gap-12 md:gap-24 relative text-left">
+              <div className="col-span-12 lg:col-span-8 space-y-32">
                 <section>
                    <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-[#F5A623] mb-10 flex items-center gap-4">
                      <span className="w-12 h-px bg-[#F5A623]"></span> The Experience
@@ -612,7 +498,6 @@ export default function App() {
                    </div>
                 </section>
 
-                {/* 2. ITINERARY */}
                 <section>
                   <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-stone-400 mb-16 flex items-center gap-4">
                     <Clock size={20} className="text-[#F5A623]" /> Complete Tour Itinerary
@@ -624,7 +509,7 @@ export default function App() {
                         <div className="absolute left-0 top-1.5 w-8 h-8 rounded-full bg-white border-2 border-stone-200 flex items-center justify-center z-10 group-hover:border-[#F5A623] transition-colors hidden md:flex">
                            <div className="w-2 h-2 rounded-full bg-stone-200 group-hover:bg-[#F5A623] transition-colors"></div>
                         </div>
-                        <div className="bg-white p-8 md:p-10 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="bg-white p-8 md:p-10 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-md transition-shadow text-left">
                            <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
                               <span className="text-[0.75rem] font-black text-[#F5A623] uppercase tracking-[0.2em]">{item.time}</span>
                               <h4 className="text-2xl font-black text-[#0F3D3E] uppercase tracking-tighter">{item.event}</h4>
@@ -636,7 +521,6 @@ export default function App() {
                   </div>
                 </section>
 
-                {/* 3. INCLUSIONS */}
                 <section className="bg-[#0F3D3E] rounded-[3.5rem] p-12 md:p-20 text-white relative overflow-hidden">
                    <Waves className="absolute -bottom-20 -right-20 text-white/5" size={400} />
                    <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-[#F5A623] mb-12 flex items-center gap-4">
@@ -654,7 +538,6 @@ export default function App() {
                    </div>
                 </section>
 
-                {/* 4. KNOWLEDGE BASE */}
                 <section>
                    <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-stone-400 mb-12 flex items-center gap-4">
                       <HelpCircle size={20} className="text-[#F5A623]" /> Tour Knowledge Base
@@ -672,39 +555,24 @@ export default function App() {
                 </section>
               </div>
 
-              {/* STICKY SIDEBAR (DESKTOP) */}
               <aside className="hidden lg:block lg:col-span-4 h-fit sticky top-32">
                 <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-stone-100 relative">
-                   <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0F3D3E] text-white px-6 py-2 rounded-full text-[0.55rem] font-black uppercase tracking-widest shadow-lg">
-                      Official Reservation
-                   </div>
+                   <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0F3D3E] text-white px-6 py-2 rounded-full text-[0.55rem] font-black uppercase tracking-widest shadow-lg">Official Reservation</div>
                    <div className="text-center mb-10">
                       <p className="text-stone-400 text-[0.6rem] font-black uppercase tracking-widest mb-2">Instant Confirmation</p>
                       <div className="flex justify-center items-center gap-1 text-[#F5A623] mb-4">
                          {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" strokeWidth={0} />)}
                       </div>
                    </div>
-                   <div className="space-y-6 mb-12">
-                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest">
-                         <ShieldCheck size={20} className="text-[#F5A623]" /> Certified Master Guide
-                      </div>
-                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest">
-                         <Map size={20} className="text-[#F5A623]" /> Private Transit Included
-                      </div>
-                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest">
-                         <Calendar size={20} className="text-[#F5A623]" /> 48h Flexible Window
-                      </div>
+                   <div className="space-y-6 mb-12 text-left">
+                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest"><ShieldCheck size={20} className="text-[#F5A623]" /> Certified Master Guide</div>
+                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest"><Map size={20} className="text-[#F5A623]" /> Private Transit Included</div>
+                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest"><Calendar size={20} className="text-[#F5A623]" /> 48h Flexible Window</div>
                    </div>
-                   <button onClick={() => { setView('booking'); window.scrollTo(0,0); }} className="w-full bg-[#0F3D3E] text-white py-8 rounded-[2rem] font-black uppercase text-[0.8rem] tracking-widest shadow-xl hover:bg-[#F5A623] transition-all transform hover:-translate-y-1">
-                      Request Booking
-                   </button>
+                   <button onClick={() => { setView('booking'); window.scrollTo(0,0); }} className="w-full bg-[#0F3D3E] text-white py-8 rounded-[2rem] font-black uppercase text-[0.8rem] tracking-widest shadow-xl hover:bg-[#F5A623] transition-all transform hover:-translate-y-1">Request Booking</button>
                    <div className="mt-8 pt-8 border-t border-stone-50 flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-stone-400">
-                         <Info size={20} />
-                      </div>
-                      <p className="text-[0.6rem] text-stone-400 font-bold uppercase leading-relaxed">
-                         No payment required at this stage. Our concierge will review your travel dates first.
-                      </p>
+                      <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-stone-400"><Info size={20} /></div>
+                      <p className="text-[0.6rem] text-stone-400 font-bold uppercase leading-relaxed text-left">No payment required at this stage. Our concierge will review your travel dates first.</p>
                    </div>
                 </div>
               </aside>
@@ -714,7 +582,7 @@ export default function App() {
 
         {/* BOOKING VIEW */}
         {view === 'booking' && (
-          <section className="pt-12 pb-32 px-6"><BookingForm tour={selectedTour} onSubmit={handleBooking} onCancel={() => setView('home')} isSubmitting={isSubmitting} /></section>
+          <section className="py-12 pb-32 px-6"><BookingForm tour={selectedTour} onSubmit={handleBooking} onCancel={() => setView('home')} isSubmitting={isSubmitting} /></section>
         )}
 
         {/* SUCCESS VIEW */}
