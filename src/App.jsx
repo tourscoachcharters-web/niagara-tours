@@ -472,7 +472,7 @@ export default function App() {
               </div>
             </section>
 
-            {/* CURRENT REVIEWS SECTION */}
+            {/* CURRENT REVIEWS SECTION WITH MOBILE SLIDER */}
             <section className="py-32 px-6 md:px-12 max-w-[1440px] mx-auto text-left bg-stone-50/50">
               <header className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
                 <div className="text-left">
@@ -481,8 +481,14 @@ export default function App() {
                 </div>
                 <button onClick={() => setView('reviews')} className="flex items-center gap-2 text-[#0F3D3E] font-bold uppercase text-[0.65rem] tracking-widest group">Read Full Stories <ArrowRight size={16} className="transition-transform group-hover:translate-x-2" /></button>
               </header>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                {reviews.slice(0, 3).map(r => <ReviewCard key={r.id} review={r} />)}
+              
+              {/* Responsive Container: Flex Slider on Mobile, Grid on Desktop */}
+              <div className="flex md:grid md:grid-cols-3 gap-8 md:gap-10 overflow-x-auto md:overflow-x-visible pb-8 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0">
+                {reviews.slice(0, 3).map(r => (
+                  <div key={r.id} className="min-w-[85vw] md:min-w-0 snap-center">
+                    <ReviewCard review={r} />
+                  </div>
+                ))}
               </div>
             </section>
           </>
@@ -656,6 +662,8 @@ export default function App() {
         @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
         .animate-fade-in { animation: fade-in 1.2s ease-out forwards; }
         body { scroll-behavior: smooth; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}} />
     </div>
   );
