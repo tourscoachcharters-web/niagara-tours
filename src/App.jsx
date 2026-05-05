@@ -9,7 +9,8 @@ import {
   Facebook, Twitter, Mail, Phone, CheckCircle,
   Calendar, CreditCard, Camera, Leaf, Play,
   Coffee, Wine, Map, Sparkles, Utensils, HelpCircle,
-  Plus, MessageSquare, Quote, Info, ExternalLink
+  Plus, MessageSquare, Quote, Info, ExternalLink,
+  Gem, Heart, Building, PartyPopper
 } from 'lucide-react';
 
 // --- FIREBASE CONFIG ---
@@ -39,12 +40,12 @@ const MetaTags = ({ view, tourName }) => {
     } else if (view === 'detail' && tourName) {
       title = `${tourName} - Luxury Niagara Falls Experience`;
       description = `Book the ${tourName}. A premium Niagara Falls tour featuring VIP access, expert guides, and a complete luxury itinerary.`;
+    } else if (view === 'enquiry') {
+      title = "Bespoke & Custom Niagara Enquiries | Private Tours";
+      description = "Request a custom-tailored Niagara Falls experience. Private charters, corporate events, and luxury wedding packages designed for you.";
     } else if (view === 'about') {
       title = "Our Heritage | The Best Niagara Falls Tour Operator since 1994";
       description = "Learn about Niagara Tours. We provide the most sophisticated and highly-rated luxury excursions to the Niagara region from Toronto.";
-    } else if (view === 'reviews') {
-      title = "Guest Reviews & Testimonials | Niagara Tours";
-      description = "Read authentic reviews from travelers who experienced our luxury Niagara Falls tours. See why we are the #1 rated operator in Ontario.";
     }
 
     document.title = title;
@@ -97,13 +98,12 @@ const Nav = ({ setView, activeView }) => {
   const links = [
     { id: 'home', label: 'Overview' },
     { id: 'tours', label: 'Tours' },
-    { id: 'gallery', label: 'Gallery' },
+    { id: 'enquiry', label: 'Bespoke' },
     { id: 'about', label: 'Heritage' },
     { id: 'reviews', label: 'Reviews' },
     { id: 'contact', label: 'Concierge' }
   ];
   const handleNav = (id) => {
-    if (['gallery'].includes(id)) return;
     setView(id);
     setIsOpen(false);
     window.scrollTo(0, 0);
@@ -220,6 +220,100 @@ const BookingForm = ({ tour, onSubmit, onCancel, isSubmitting }) => {
   );
 };
 
+const CustomEnquiryForm = ({ onSubmit, isSubmitting }) => {
+  const [formData, setFormData] = useState({ 
+    name: '', email: '', phone: '', eventType: 'Private', guestCount: '1-4', date: '', details: '' 
+  });
+
+  return (
+    <div className="animate-fade-in space-y-24">
+      {/* Hero Section */}
+      <section className="relative h-[60vh] rounded-[4rem] overflow-hidden">
+        <SafeImage src="/custom-hero.jpg" alt="Bespoke Niagara Experiences" className="absolute inset-0 w-full h-full object-cover" style={{ filter: 'brightness(0.4)' }} />
+        <div className="relative z-10 h-full flex flex-col justify-center px-12 md:px-24">
+          <span className="text-[#F5A623] text-[0.7rem] font-black uppercase tracking-[0.4em] mb-6 block">Beyond the Catalog</span>
+          <h1 className="text-white text-6xl md:text-9xl font-black uppercase tracking-tighter leading-[0.8] mb-8">Bespoke<br/>Niagara.</h1>
+          <p className="text-white/70 text-xl max-w-xl font-medium leading-relaxed">From private helicopter wedding proposals to corporate vineyard retreats, our concierge team builds the impossible.</p>
+        </div>
+      </section>
+
+      {/* Form Section */}
+      <div className="grid lg:grid-cols-2 gap-24 max-w-[1440px] mx-auto px-6 md:px-12 items-start pb-32">
+        <div>
+          <h2 className="text-5xl font-black text-[#0F3D3E] uppercase tracking-tighter mb-12">The Blueprint of Luxury</h2>
+          <p className="text-xl text-stone-500 leading-relaxed mb-16">Provide us with the foundational details of your vision. Our master planners will respond within 4 business hours to begin the curation process.</p>
+          
+          <div className="space-y-8">
+            {[
+              { icon: <Gem size={24}/>, title: "Private Charters", desc: "Executive transit and dedicated aircraft options for total privacy." },
+              { icon: <Building size={24}/>, title: "Corporate Retreats", desc: "Immersive bonding experiences at Niagara's most exclusive estates." },
+              { icon: <Heart size={24}/>, title: "Wedding & Proposals", desc: "Breathtaking backdrops and professional orchestration for your milestone." }
+            ].map((feature, i) => (
+              <div key={i} className="flex gap-6 group">
+                <div className="w-14 h-14 rounded-2xl bg-[#0F3D3E] flex items-center justify-center text-[#F5A623] shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                  {feature.icon}
+                </div>
+                <div>
+                  <h4 className="text-lg font-black text-[#0F3D3E] uppercase tracking-tighter mb-1">{feature.title}</h4>
+                  <p className="text-sm text-stone-400 font-medium">{feature.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <form onSubmit={(e) => { e.preventDefault(); onSubmit(formData); }} className="bg-white p-12 md:p-20 rounded-[4rem] shadow-2xl border border-stone-100 space-y-8">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-2">
+              <label className="text-[0.6rem] font-bold uppercase tracking-widest text-stone-400 ml-2">Lead Name</label>
+              <input required className="w-full bg-[#FDFDF9] p-5 rounded-2xl border border-stone-100 focus:border-[#F5A623] outline-none transition-all" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Mr. Sterling Cooper" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[0.6rem] font-bold uppercase tracking-widest text-stone-400 ml-2">Direct Contact</label>
+              <input required type="tel" className="w-full bg-[#FDFDF9] p-5 rounded-2xl border border-stone-100 focus:border-[#F5A623] outline-none transition-all" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="+1 416 --- ----" />
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <label className="text-[0.6rem] font-bold uppercase tracking-widest text-stone-400 ml-2">Email Address</label>
+            <input required type="email" className="w-full bg-[#FDFDF9] p-5 rounded-2xl border border-stone-100 focus:border-[#F5A623] outline-none transition-all" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="sc@luxury.com" />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-2">
+              <label className="text-[0.6rem] font-bold uppercase tracking-widest text-stone-400 ml-2">Event Nature</label>
+              <select className="w-full bg-[#FDFDF9] p-5 rounded-2xl border border-stone-100 focus:border-[#F5A623] outline-none transition-all appearance-none" value={formData.eventType} onChange={e => setFormData({...formData, eventType: e.target.value})}>
+                <option value="Private">Private Luxury</option>
+                <option value="Corporate">Corporate / Brand</option>
+                <option value="Wedding">Wedding / Proposal</option>
+                <option value="Media">Film / Media Production</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-[0.6rem] font-bold uppercase tracking-widest text-stone-400 ml-2">Guest Volume</label>
+              <select className="w-full bg-[#FDFDF9] p-5 rounded-2xl border border-stone-100 focus:border-[#F5A623] outline-none transition-all appearance-none" value={formData.guestCount} onChange={e => setFormData({...formData, guestCount: e.target.value})}>
+                <option value="1-4">Exclusive (1-4)</option>
+                <option value="5-12">Select Group (5-12)</option>
+                <option value="13-50">Private Coach (13-50)</option>
+                <option value="50+">Large Scale (50+)</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[0.6rem] font-bold uppercase tracking-widest text-stone-400 ml-2">Aspirations & Requirements</label>
+            <textarea rows="4" className="w-full bg-[#FDFDF9] p-5 rounded-2xl border border-stone-100 focus:border-[#F5A623] outline-none transition-all" value={formData.details} onChange={e => setFormData({...formData, details: e.target.value})} placeholder="Describe your vision (e.g., Midnight fireworks at the brink, private icewine cellar dinner...)"></textarea>
+          </div>
+
+          <button disabled={isSubmitting} type="submit" className="w-full bg-[#0F3D3E] text-white py-6 rounded-2xl font-black uppercase tracking-widest hover:bg-[#F5A623] transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3">
+            {isSubmitting ? 'Submitting Blueprint...' : <>Initiate Concierge Review <ArrowRight size={20}/></>}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 export default function App() {
   const [view, setView] = useState('home');
   const [user, setUser] = useState(null);
@@ -247,18 +341,8 @@ export default function App() {
           { name: "The Grand Estate", price: 129, category: "Heritage", capacity: 48, duration: "9 Hours", description: "Experience the ultimate Niagara Falls tour from Toronto. A full-day luxury sightseeing journey through historic Niagara-on-the-Lake and the Horseshoe Falls.", highlights: ["Heritage Sightseeing", "Elite Vineyard Access", "Brink Observation", "Luxury Coach Transit"], included: ["Certified Local Guide", "3-Course Winery Lunch", "Fast-Track Entry", "Bottled Water"], itinerary: [{ time: "08:30 AM", event: "Toronto Departure", desc: "Board our executive coach for a luxury day trip to Niagara Falls." }, { time: "10:30 AM", event: "Niagara-on-the-Lake", desc: "Explore Canada's most historic and beautiful town." }, { time: "12:30 PM", event: "Gourmet Lunch", desc: "Seated dining at a premier Niagara vineyard." }, { time: "03:00 PM", event: "Falls Experience", desc: "Unobstructed views from the brink of the Falls." }], faqs: [{ q: "Are tours from Toronto daily?", a: "Yes, we offer premium daily departures from Union Station and major hotels." }], image: "/tour-1.jpg" },
           { name: "Sunset Illumination", price: 159, category: "Culinary", capacity: 24, duration: "6 Hours", description: "The best Niagara Falls night tour. Watch the illumination show after a gourmet dinner with unobstructed Falls views.", highlights: ["Night Light Show", "Golden Hour Views", "Fine Dining Experience", "Luxury Chauffeur"], included: ["Fallsview Seating", "Illumination Access", "Gourmet Dinner", "VIP Scenic View"], itinerary: [{ time: "03:30 PM", event: "Afternoon Pickup", desc: "Luxury transit to the Falls for the sunset transition." }, { time: "07:00 PM", event: "Fallsview Dinner", desc: "High-end dining with the world's best waterfall view." }], faqs: [{ q: "Is this tour romantic?", a: "It is our #1 rated tour for couples and special occasions in Niagara." }], image: "/tour-2.jpg" },
           { name: "Aerial Majesty", price: 499, category: "Luxury", capacity: 4, duration: "2 Hours", description: "Private Niagara Falls helicopter tours. Discover the most powerful natural wonder in Canada from the air.", highlights: ["Private Flight", "Champagne Welcome", "Glass-Top Views", "Executive Pickup"], included: ["Helicopter Charter", "Limo Pickup", "Vintage Champagne", "Private Concierge"], itinerary: [{ time: "11:00 AM", event: "The Flight", desc: "A 45-minute grand flight over the Niagara River and Whirlpool." }], faqs: [{ q: "Is motion sickness common?", a: "Our pilots use stable flight paths for maximum passenger comfort." }], image: "/tour-3.jpg" },
-          { name: "Winter Wonderland", price: 149, category: "Seasonal", capacity: 12, duration: "7 Hours", description: "A specialized winter tour to witness the Falls transformed into a cathedral of ice in maximum warmth and comfort.", highlights: ["Frozen Falls Observation", "Festival of Lights", "Winter Vineyard Tour", "Heated Transit"], included: ["Thermal Blankets", "Hot Artisan Cider", "Professional Photographer", "Icewine Tasting"], itinerary: [{ time: "01:00 PM", event: "Frozen Crest", desc: "View the massive icicles forming at the brink of the falls." }, { time: "05:00 PM", event: "Light Festival", desc: "A driving tour through 3 million holiday lights." }], faqs: [{ q: "How cold is it?", a: "Temperatures can reach -15°C; we recommend full winter gear." }], image: "/tour-4.jpg" },
           { name: "Adventure Tour", price: 189, category: "Adventure", capacity: 20, duration: "5 Hours", description: "Designed for those who want to feel the kinetic energy and mist of the rapids.", highlights: ["Hornblower VIP Entry", "Cave of the Winds", "Whirlpool Aero Car", "Class 6 Rapids"], included: ["Recyclable Rain Gear", "Priority Attraction Pass", "Action Guide", "Energy Refreshments"], itinerary: [{ time: "10:30 AM", event: "Hornblower Voyage", desc: "A boat journey directly into the heart of the mist." }, { time: "12:00 PM", event: "The Cave Walk", desc: "Stand under the Bridal Veil falls on the Hurricane Deck." }], faqs: [{ q: "Will I get wet?", a: "Yes, you will get very wet. We provide heavy-duty ponchos." }], image: "/tour-5.jpg" },
-          { name: "Sommelier's Route", price: 249, category: "Culinary", capacity: 8, duration: "8 Hours", description: "A masterclass in terroir. Visit the private cellars of the region's top producers.", highlights: ["Private Library Tasting", "Terroir Masterclass", "Cellar Master Meet", "Vineyard Walk"], included: ["Level 3 Sommelier", "Tasting Fees Included", "Farm-to-Table Lunch", "Bespoke Glassware"], itinerary: [{ time: "11:30 AM", event: "Estate #1", desc: "Private library tasting of aged VQA vintages." }, { time: "01:30 PM", event: "Chef's Lunch", desc: "A seasonal meal prepared by an estate executive chef." }], faqs: [{ q: "Can I buy wine?", a: "Yes, we provide safe storage in the vehicle for purchases." }], image: "/tour-6.jpg" },
-          { name: "The Midnight Gala", price: 799, category: "Private", capacity: 4, duration: "4 Hours", description: "The peak of exclusivity. Private midnight limousine to a reserved fireworks balcony.", highlights: ["Stretch Limousine", "Private Balcony", "Krug Champagne", "Midnight Dining"], included: ["Personal Security", "Private Chef Service", "Premium Open Bar", "Direct Home Dropoff"], itinerary: [{ time: "10:30 PM", event: "Private Rooftop", desc: "Access to a restricted balcony overlooking the brink." }, { time: "11:00 PM", event: "Gala Show", desc: "Front row fireworks with dedicated table service." }], faqs: [{ q: "Is there a dress code?", a: "Formal or semi-formal attire is required for this expedition." }], image: "/tour-7.jpg" },
-          { name: "Historic Forts Tour", price: 119, category: "Heritage", capacity: 32, duration: "7 Hours", description: "A focused military history tour of the sites that shaped the border in 1812.", highlights: ["Musket Drills", "Fort Erie Siege Walk", "War of 1812 History", "Cannon Firing"], included: ["Historian Guide", "Period-Authentic Lunch", "Entrance Fees", "Educational Pack"], itinerary: [{ time: "10:00 AM", event: "Old Fort Erie", desc: "Explore Canada's bloodiest battlefield." }], faqs: [{ q: "Are guns fired?", a: "Yes, blank-fire musket and cannon demonstrations occur regularly." }], image: "/tour-8.jpg" },
-          { name: "Nature's Sanctuary", price: 139, category: "Eco", capacity: 14, duration: "6 Hours", description: "Explore the hidden Carolinian flora and ancient rock formations of the Glen.", highlights: ["Butterfly Conservatory", "Glen Nature Hike", "Botanical Gardens", "Organic Picnic"], included: ["Botanist Expert", "Organic Picnic Lunch", "Electric Shuttle", "Butterfly Passport"], itinerary: [{ time: "12:00 PM", event: "Glen Hike", desc: "A guided moderate hike through preclinical gorge trails." }], faqs: [{ q: "Is the hike steep?", a: "Yes, there are stone stairs; sturdy shoes are required." }], image: "/tour-9.jpg" },
-          { name: "Photographer's Lens", price: 299, category: "Luxury", capacity: 6, duration: "5 Hours", description: "Master long-exposure shots with access to tripod-friendly restricted vantage points.", highlights: ["Restricted Point Access", "Light Coaching", "Blue Hour Training", "Long-Exposure Skills"], included: ["Pro Tripod Rental", "Photography permits", "Field Workshop", "High-Speed Transit"], itinerary: [{ time: "05:30 PM", event: "Golden Hour Shoot", desc: "Capturing the rapids from a private cliff edge." }], faqs: [{ q: "Do I need a pro camera?", a: "A camera with manual mode (DSLR/Mirrorless) is recommended." }], image: "/tour-10.jpg" },
-          { name: "Behind the Thunder", price: 169, category: "Adventure", capacity: 16, duration: "4 Hours", description: "Deep dive into the bedrock tunnels directly behind the massive water wall.", highlights: ["Tunnel Exploration", "Mist Immersion", "Geological Briefing", "Portal Views"], included: ["Yellow Poncho Service", "Cave Access Pass", "Seismology Guide", "Safety Briefing"], itinerary: [{ time: "11:00 AM", event: "Tunnel Entry", desc: "Entering the bedrock 150 feet below ground." }], faqs: [{ q: "Is it loud?", a: "Yes, the thunder of the water is intense and powerful." }], image: "/tour-11.jpg" },
-          { name: "Gourmet Parkway Picnic", price: 145, category: "Culinary", capacity: 10, duration: "5 Hours", description: "A slow-paced luxury drive along the world-renowned Niagara Parkway with a chef-prepared picnic.", highlights: ["Scenic River Drive", "Custom Picnic Setup", "Floriculture Tour", "Gourmet Hamper"], included: ["Chef-Prepared Basket", "Blanket & Pillow Service", "Parkway Transit", "Champagne Bottle"], itinerary: [{ time: "01:00 PM", event: "River Picnic", desc: "Dining at a secluded riverside location." }], faqs: [{ q: "Can dietary needs be met?", a: "Yes, we customize baskets for vegan, GF, and keto guests." }], image: "/tour-12.jpg" },
-          { name: "Whirlpool Jet Boat", price: 195, category: "Adventure", capacity: 22, duration: "3 Hours", description: "High-octane power boating through the devil’s hole rapids. The ultimate thrill ride.", highlights: ["Class 5 Rapids", "Wet Jet Action", "Power Thrills", "River Gorge Speed"], included: ["Safety Vest", "Full Wet Suit", "Professional Captain", "River Safety Brief"], itinerary: [{ time: "02:00 PM", event: "Rapid Charge", desc: "Navigating the standing waves of the Whirlpool." }], faqs: [{ q: "Will I get wet?", a: "No, our boats are engineered for stability and safety." }], image: "/tour-13.jpg" },
-          { name: "Romance of the Mist", price: 349, category: "Luxury", capacity: 2, duration: "3 Hours", description: "A private curated tour for couples featuring hidden viewpoints and a professional portrait session.", highlights: ["Private Portraits", "Secluded Viewpoints", "Lover's Bridge Walk", "Luxury Sedan"], included: ["Pro Photographer", "High-Res Digital Files", "Flowers & Chocolates", "Private Chauffeur"], itinerary: [{ time: "06:00 PM", event: "Sunset Shoot", desc: "Professional portraits with the Falls as your backdrop." }], faqs: [{ q: "When do we get photos?", a: "Edited digital files are delivered within 48 hours." }], image: "/tour-14.jpg" },
-          { name: "Indigenous Heritage", price: 135, category: "Heritage", capacity: 20, duration: "6 Hours", description: "Learn the ancient history of the Niagara region through the lens of the Haudenosaunee and Anishinaabe peoples.", highlights: ["Sacred Site Visits", "Traditional Storytelling", "Indigenous Art Gallery", "Historical Treaty Focus"], included: ["Indigenous Cultural Guide", "Traditional Snacks", "Gallery Entrance", "Donation to Local Nations"], itinerary: [{ time: "10:00 AM", event: "Sacred Falls", desc: "Hearing the creation stories of the Great Water." }], faqs: [{ q: "Is it respectful?", a: "Yes, this tour is designed and led by local Indigenous guides." }], image: "/tour-15.jpg" }
+          { name: "Sommelier's Route", price: 249, category: "Culinary", capacity: 8, duration: "8 Hours", description: "A masterclass in terroir. Visit the private cellars of the region's top producers.", highlights: ["Private Library Tasting", "Terroir Masterclass", "Cellar Master Meet", "Vineyard Walk"], included: ["Level 3 Sommelier", "Tasting Fees Included", "Farm-to-Table Lunch", "Bespoke Glassware"], itinerary: [{ time: "11:30 AM", event: "Estate #1", desc: "Private library tasting of aged VQA vintages." }, { time: "01:30 PM", event: "Chef's Lunch", desc: "A seasonal meal prepared by an estate executive chef." }], faqs: [{ q: "Can I buy wine?", a: "Yes, we provide safe storage in the vehicle for purchases." }], image: "/tour-6.jpg" }
         ];
         seed.forEach(t => setDoc(doc(toursCollection, t.name.toLowerCase().replace(/\s+/g, '-')), t));
       } else {
@@ -275,9 +359,7 @@ export default function App() {
       if (snap.empty) {
         const seed = [
           { name: "James W.", rating: 5, comment: "The helicopter ride was breathtaking! I've lived in Toronto for 10 years and never seen the Falls like this. Truly luxury service from start to finish.", createdAt: serverTimestamp() },
-          { name: "Sarah L.", rating: 5, comment: "Excellent wine selection on the Sommelier tour. Our guide was incredibly knowledgeable. The farm-to-table lunch was a highlight of our trip.", createdAt: serverTimestamp() },
-          { name: "Robert M.", rating: 5, comment: "A bit wet on the adventure tour, but well worth it! VIP boarding saved us at least 2 hours of waiting in line. Professional staff.", createdAt: serverTimestamp() },
-          { name: "Elena G.", rating: 4, comment: "The Sunset Illumination tour is highly recommended for couples. The dinner view was spectacular. Everything was perfectly timed.", createdAt: serverTimestamp() }
+          { name: "Sarah L.", rating: 5, comment: "Excellent wine selection on the Sommelier tour. Our guide was incredibly knowledgeable. The farm-to-table lunch was a highlight of our trip.", createdAt: serverTimestamp() }
         ];
         seed.forEach(r => addDoc(reviewsCollection, r));
       } else {
@@ -292,6 +374,20 @@ export default function App() {
     try {
       const bookingsRef = collection(db, 'artifacts', appId, 'public', 'data', 'bookings');
       await addDoc(bookingsRef, { ...data, tourId: selectedTour?.id, tourName: selectedTour?.name, userId: user.uid, createdAt: serverTimestamp() });
+      setView('success');
+      window.scrollTo(0,0);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCustomEnquiry = async (data) => {
+    setIsSubmitting(true);
+    try {
+      const enquiriesRef = collection(db, 'artifacts', appId, 'public', 'data', 'enquiries');
+      await addDoc(enquiriesRef, { ...data, type: 'Bespoke_Request', userId: user.uid, createdAt: serverTimestamp() });
       setView('success');
       window.scrollTo(0,0);
     } catch (err) {
@@ -332,10 +428,10 @@ export default function App() {
                   <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-12">
                     <div className="max-w-4xl pt-10">
                       <h1 className="text-white font-black text-6xl md:text-[9.5rem] uppercase leading-[0.8] tracking-tighter mb-10">Luxury <br/><span className="text-[#F5A623]">Niagara.</span></h1>
-                      <p className="text-white/90 text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mb-12">Experience the <span className="text-[#F5A623] font-bold">best Niagara Falls tours from Toronto</span>. Luxury small-group sightseeing with VIP access to Hornblower cruises and historic wineries.</p>
+                      <p className="text-white/90 text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mb-12">Experience the <span className="text-[#F5A623] font-bold">best Niagara Falls tours from Toronto</span>. Luxury small-group sightseeing with VIP access to Hornblower cruises and bespoke itineraries.</p>
                       <div className="flex flex-wrap gap-6">
                         <button onClick={() => setView('tours')} className="bg-[#F5A623] text-black px-12 py-5 rounded-xl font-black uppercase text-[0.8rem] tracking-[0.2em] shadow-2xl hover:bg-white transition-all">Book Tour</button>
-                        <button className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-12 py-5 rounded-xl font-black uppercase text-[0.8rem] tracking-[0.2em] hover:bg-white/20 transition-all flex items-center gap-3"><Play size={18} fill="currentColor" /> Visual Proof</button>
+                        <button onClick={() => setView('enquiry')} className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-12 py-5 rounded-xl font-black uppercase text-[0.8rem] tracking-[0.2em] hover:bg-white/20 transition-all flex items-center gap-3">Bespoke Inquiry</button>
                       </div>
                     </div>
                   </div>
@@ -349,44 +445,37 @@ export default function App() {
                 <button onClick={() => setView('tours')} className="flex items-center gap-2 text-[#0F3D3E] font-bold uppercase text-[0.65rem] tracking-widest group">Browse All Packages <ArrowRight size={16} className="transition-transform group-hover:translate-x-2" /></button>
               </header>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {tours.slice(0, 6).map(t => <TourCard key={t.id} tour={t} onSelect={(tour) => { setSelectedTour(tour); setView('detail'); window.scrollTo(0,0); }} />)}
+                {tours.slice(0, 3).map(t => <TourCard key={t.id} tour={t} onSelect={(tour) => { setSelectedTour(tour); setView('detail'); window.scrollTo(0,0); }} />)}
               </div>
             </section>
 
-            {/* REVIEWS SECTION FOR HOME PAGE */}
-            <section className="py-32 px-6 md:px-12 max-w-[1440px] mx-auto text-left bg-stone-50/50 border-y border-stone-100">
-              <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
-                <div className="text-left">
-                  <span className="text-[#F5A623] text-[0.6rem] font-bold uppercase tracking-[0.4em] mb-4 block">Guest Testimonials</span>
-                  <h2 className="text-5xl font-black text-[#0F3D3E] uppercase tracking-tighter leading-none">Voices of Discovery</h2>
+            {/* BESPOKE CTA */}
+            <section className="py-32 bg-[#0F3D3E] text-white">
+              <div className="max-w-[1440px] mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-24 items-center">
+                <div className="relative">
+                  <div className="absolute -top-12 -left-12 w-64 h-64 bg-[#F5A623]/20 rounded-full blur-[100px]"></div>
+                  <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] mb-12">The<br/><span className="text-[#F5A623]">Private</span><br/>Collection.</h2>
+                  <p className="text-xl text-white/60 mb-12 max-w-md">Looking for something more exclusive? Our Bespoke team creates private charters and curated culinary journeys designed specifically for your group.</p>
+                  <button onClick={() => setView('enquiry')} className="bg-[#F5A623] text-black px-12 py-5 rounded-full font-black uppercase text-[0.8rem] tracking-[0.2em] hover:bg-white transition-all flex items-center gap-3">Explore Bespoke Services <ArrowRight size={20}/></button>
                 </div>
-                <button onClick={() => setView('reviews')} className="flex items-center gap-2 text-[#0F3D3E] font-bold uppercase text-[0.65rem] tracking-widest group">
-                  Read All Stories <ArrowRight size={16} className="transition-transform group-hover:translate-x-2" />
-                </button>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-6 pt-12">
+                    <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-stone-800"><SafeImage src="/bespoke-1.jpg" className="w-full h-full object-cover opacity-80" /></div>
+                    <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-stone-800"><SafeImage src="/bespoke-2.jpg" className="w-full h-full object-cover opacity-80" /></div>
+                  </div>
+                  <div className="space-y-6">
+                    <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-stone-800"><SafeImage src="/bespoke-3.jpg" className="w-full h-full object-cover opacity-80" /></div>
+                    <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-stone-800"><SafeImage src="/bespoke-4.jpg" className="w-full h-full object-cover opacity-80" /></div>
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                {reviews.slice(0, 3).map(r => <ReviewCard key={r.id} review={r} />)}
-              </div>
-            </section>
-
-            {/* CTA SECTION */}
-            <section className="py-24 px-6 md:px-12 max-w-[1440px] mx-auto">
-               <div className="relative h-[500px] rounded-[4rem] overflow-hidden flex items-center justify-center text-center">
-                 <SafeImage src="/cta-bg.jpg" alt="Niagara Falls Magic" className="absolute inset-0 w-full h-full object-cover" style={{ filter: 'brightness(0.5)' }} />
-                 <div className="relative z-10 p-8 md:p-16 max-w-3xl">
-                   <h2 className="text-white text-4xl md:text-6xl font-black uppercase tracking-tighter mb-6 leading-tight">
-                     Experience the Majesty of Niagara
-                   </h2>
-                   <p className="text-white/80 text-lg md:text-xl font-medium mb-10 leading-relaxed">
-                     From the thunderous falls to world-renowned wineries, discover breathtaking moments on Canada's most exclusive day tour.
-                   </p>
-                   <button onClick={() => setView('tours')} className="bg-white text-[#0F3D3E] px-10 py-5 rounded-full font-black uppercase text-[0.75rem] tracking-widest hover:bg-[#F5A623] hover:text-white transition-all shadow-2xl flex items-center gap-2 mx-auto group">
-                     Reserve Your Experience <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                   </button>
-                 </div>
-               </div>
             </section>
           </>
+        )}
+
+        {/* ENQUIRY VIEW */}
+        {view === 'enquiry' && (
+          <CustomEnquiryForm onSubmit={handleCustomEnquiry} isSubmitting={isSubmitting} />
         )}
 
         {/* REVIEWS VIEW */}
@@ -441,7 +530,7 @@ export default function App() {
           </section>
         )}
 
-        {/* TOUR DETAIL VIEW - MODERN MAGAZINE LAYOUT */}
+        {/* TOUR DETAIL VIEW */}
         {view === 'detail' && selectedTour && (
           <section className="animate-fade-in pb-32">
             <div className="relative h-[60vh] md:h-[70vh] w-full bg-black overflow-hidden">
@@ -481,118 +570,10 @@ export default function App() {
                       <p className="text-2xl font-black text-[#0F3D3E] tracking-tighter uppercase">{selectedTour.duration}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 rounded-2xl bg-stone-50 flex items-center justify-center text-[#F5A623]">
-                      <Users size={28} />
-                    </div>
-                    <div>
-                      <p className="text-[0.6rem] font-black text-stone-400 uppercase tracking-widest mb-1 text-left">Capacity</p>
-                      <p className="text-2xl font-black text-[#0F3D3E] tracking-tighter uppercase">{selectedTour.capacity} Guests</p>
-                    </div>
-                  </div>
                   <button onClick={() => { setView('booking'); window.scrollTo(0,0); }} className="bg-[#0F3D3E] text-white px-10 py-5 rounded-2xl font-black uppercase text-[0.7rem] tracking-widest hover:bg-[#F5A623] transition-all shadow-xl hover:-translate-y-1">
                     Reserve Now
                   </button>
                </div>
-            </div>
-
-            <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-32 grid grid-cols-12 gap-12 md:gap-24 relative text-left">
-              <div className="col-span-12 lg:col-span-8 space-y-32">
-                <section>
-                   <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-[#F5A623] mb-10 flex items-center gap-4">
-                     <span className="w-12 h-px bg-[#F5A623]"></span> The Experience
-                   </h3>
-                   <p className="text-3xl md:text-5xl font-medium text-[#0F3D3E] leading-[1.1] mb-12 tracking-tight">
-                     {selectedTour.description}
-                   </p>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {selectedTour.highlights?.map((h, i) => (
-                        <div key={i} className="flex items-center gap-4 p-6 bg-stone-50 rounded-2xl border border-stone-100">
-                           <Sparkles size={18} className="text-[#F5A623] shrink-0" />
-                           <span className="text-xs font-black text-[#0F3D3E] uppercase tracking-widest">{h}</span>
-                        </div>
-                      ))}
-                   </div>
-                </section>
-
-                <section>
-                  <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-stone-400 mb-16 flex items-center gap-4">
-                    <Clock size={20} className="text-[#F5A623]" /> Complete Tour Itinerary
-                  </h3>
-                  <div className="space-y-0 relative">
-                    <div className="absolute left-[15px] top-4 bottom-4 w-0.5 bg-stone-100 hidden md:block"></div>
-                    {selectedTour.itinerary?.map((item, idx) => (
-                      <div key={idx} className="relative pb-16 last:pb-0 md:pl-20 group">
-                        <div className="absolute left-0 top-1.5 w-8 h-8 rounded-full bg-white border-2 border-stone-200 flex items-center justify-center z-10 group-hover:border-[#F5A623] transition-colors hidden md:flex">
-                           <div className="w-2 h-2 rounded-full bg-stone-200 group-hover:bg-[#F5A623] transition-colors"></div>
-                        </div>
-                        <div className="bg-white p-8 md:p-10 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-md transition-shadow text-left">
-                           <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
-                              <span className="text-[0.75rem] font-black text-[#F5A623] uppercase tracking-[0.2em]">{item.time}</span>
-                              <h4 className="text-2xl font-black text-[#0F3D3E] uppercase tracking-tighter">{item.event}</h4>
-                           </div>
-                           <p className="text-stone-500 text-lg leading-relaxed">{item.desc}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                <section className="bg-[#0F3D3E] rounded-[3.5rem] p-12 md:p-20 text-white relative overflow-hidden">
-                   <Waves className="absolute -bottom-20 -right-20 text-white/5" size={400} />
-                   <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-[#F5A623] mb-12 flex items-center gap-4">
-                      <ShieldCheck size={20} /> What's Included
-                   </h3>
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-                      {selectedTour.included?.map((inc, i) => (
-                        <div key={i} className="flex items-start gap-5">
-                           <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                              <CheckCircle size={18} className="text-[#F5A623]" />
-                           </div>
-                           <span className="text-lg font-bold leading-tight pt-1">{inc}</span>
-                        </div>
-                      ))}
-                   </div>
-                </section>
-
-                <section>
-                   <h3 className="text-[0.7rem] font-black uppercase tracking-[0.4em] text-stone-400 mb-12 flex items-center gap-4">
-                      <HelpCircle size={20} className="text-[#F5A623]" /> Tour Knowledge Base
-                   </h3>
-                   <div className="grid gap-6">
-                      {selectedTour.faqs?.map((faq, i) => (
-                        <div key={i} className="bg-white border border-stone-100 p-10 rounded-3xl group hover:border-[#F5A623] transition-colors">
-                           <h4 className="text-xl font-black text-[#0F3D3E] uppercase tracking-tighter mb-4 flex items-center gap-3">
-                              <Plus size={18} className="text-[#F5A623] group-hover:rotate-90 transition-transform" /> {faq.q}
-                           </h4>
-                           <p className="text-stone-500 text-lg leading-relaxed pl-7">{faq.a}</p>
-                        </div>
-                      ))}
-                   </div>
-                </section>
-              </div>
-
-              <aside className="hidden lg:block lg:col-span-4 h-fit sticky top-32">
-                <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-stone-100 relative">
-                   <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0F3D3E] text-white px-6 py-2 rounded-full text-[0.55rem] font-black uppercase tracking-widest shadow-lg">Official Reservation</div>
-                   <div className="text-center mb-10">
-                      <p className="text-stone-400 text-[0.6rem] font-black uppercase tracking-widest mb-2">Instant Confirmation</p>
-                      <div className="flex justify-center items-center gap-1 text-[#F5A623] mb-4">
-                         {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" strokeWidth={0} />)}
-                      </div>
-                   </div>
-                   <div className="space-y-6 mb-12 text-left">
-                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest"><ShieldCheck size={20} className="text-[#F5A623]" /> Certified Master Guide</div>
-                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest"><Map size={20} className="text-[#F5A623]" /> Private Transit Included</div>
-                      <div className="flex items-center gap-4 text-stone-600 text-[0.65rem] font-black uppercase tracking-widest"><Calendar size={20} className="text-[#F5A623]" /> 48h Flexible Window</div>
-                   </div>
-                   <button onClick={() => { setView('booking'); window.scrollTo(0,0); }} className="w-full bg-[#0F3D3E] text-white py-8 rounded-[2rem] font-black uppercase text-[0.8rem] tracking-widest shadow-xl hover:bg-[#F5A623] transition-all transform hover:-translate-y-1">Request Booking</button>
-                   <div className="mt-8 pt-8 border-t border-stone-50 flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center text-stone-400"><Info size={20} /></div>
-                      <p className="text-[0.6rem] text-stone-400 font-bold uppercase leading-relaxed text-left">No payment required at this stage. Our concierge will review your travel dates first.</p>
-                   </div>
-                </div>
-              </aside>
             </div>
           </section>
         )}
@@ -604,7 +585,14 @@ export default function App() {
 
         {/* SUCCESS VIEW */}
         {view === 'success' && (
-          <section className="py-72 text-center animate-fade-in px-10"><div className="w-32 h-32 bg-[#F5A623] rounded-full flex items-center justify-center mx-auto mb-16 shadow-2xl"><CheckCircle className="text-white" size={72} /></div><h2 className="text-7xl md:text-[11rem] font-black text-[#0F3D3E] uppercase tracking-tighter leading-none mb-12">Confirmed.</h2><p className="text-3xl text-stone-500 max-w-2xl mx-auto font-medium leading-relaxed">Your tour has been secured. Our concierge will be in touch shortly with your boarding credentials.</p><button onClick={() => { setView('home'); window.scrollTo(0,0); }} className="mt-20 bg-[#0F3D3E] text-white px-20 py-9 rounded-full font-black uppercase transition-all hover:bg-[#F5A623] shadow-2xl tracking-[0.3em] text-base">Return Home</button></section>
+          <section className="py-72 text-center animate-fade-in px-10">
+            <div className="w-32 h-32 bg-[#F5A623] rounded-full flex items-center justify-center mx-auto mb-16 shadow-2xl">
+              <CheckCircle className="text-white" size={72} />
+            </div>
+            <h2 className="text-7xl md:text-[11rem] font-black text-[#0F3D3E] uppercase tracking-tighter leading-none mb-12">Confirmed.</h2>
+            <p className="text-3xl text-stone-500 max-w-2xl mx-auto font-medium leading-relaxed">Your inquiry has been received. Our concierge will be in touch shortly to refine your experience.</p>
+            <button onClick={() => { setView('home'); window.scrollTo(0,0); }} className="mt-20 bg-[#0F3D3E] text-white px-20 py-9 rounded-full font-black uppercase transition-all hover:bg-[#F5A623] shadow-2xl tracking-[0.3em] text-base">Return Home</button>
+          </section>
         )}
 
         {/* ABOUT VIEW */}
@@ -639,11 +627,11 @@ export default function App() {
         <div className="max-w-[1440px] mx-auto text-center md:text-left">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-20 mb-20 border-b border-white/10 pb-20">
             <div className="col-span-1 md:col-span-1 flex flex-col items-center md:items-start"><Logo light /><p className="mt-8 text-white/40 text-sm leading-relaxed max-w-xs">The <span className="text-white font-bold">best Niagara Falls tours in Canada</span>. Since 1994, providing discerning travelers with bespoke access to natural wonders.</p></div>
-            <div><h4 className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-[#F5A623] mb-10">Company</h4><ul className="space-y-4 text-sm text-white/60"><li onClick={() => { setView('about'); window.scrollTo(0,0); }} className="hover:text-white cursor-pointer transition-colors">Our Heritage</li><li onClick={() => { setView('contact'); window.scrollTo(0,0); }} className="hover:text-white cursor-pointer transition-colors">Contact Us</li><li className="hover:text-white cursor-pointer transition-colors">Privacy Policy</li><li className="hover:text-white cursor-pointer transition-colors">Terms of Service</li></ul></div>
-            <div><h4 className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-[#F5A623] mb-10">Connect</h4><ul className="space-y-4 text-sm text-white/60"><li className="flex items-center gap-3 justify-center md:justify-start hover:text-white cursor-pointer transition-colors"><MapPin size={16} /> Toronto, ON</li><li className="flex items-center gap-3 justify-center md:justify-start hover:text-white cursor-pointer transition-colors"><Instagram size={16} /> @NiagaraTours</li><li className="flex items-center gap-3 justify-center md:justify-start hover:text-white cursor-pointer transition-colors"><Facebook size={16} /> Niagara Tours</li></ul></div>
-            <div><h4 className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-[#F5A623] mb-10">Newsletter</h4><p className="text-white/40 text-xs mb-8">Exclusive Niagara Falls sightseeing insights and seasonal offers.</p><div className="flex flex-col gap-3"><input className="bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#F5A623] transition-all" placeholder="Email address" /><button className="bg-[#F5A623] text-[#0F3D3E] py-4 rounded-xl font-black uppercase text-[0.6rem] tracking-widest shadow-xl">Subscribe</button></div></div>
+            <div><h4 className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-[#F5A623] mb-10">Experience</h4><ul className="space-y-4 text-sm text-white/60"><li onClick={() => { setView('tours'); window.scrollTo(0,0); }} className="hover:text-white cursor-pointer transition-colors">Catalog</li><li onClick={() => { setView('enquiry'); window.scrollTo(0,0); }} className="hover:text-white cursor-pointer transition-colors">Bespoke Requests</li><li onClick={() => { setView('reviews'); window.scrollTo(0,0); }} className="hover:text-white cursor-pointer transition-colors">Guest Reviews</li></ul></div>
+            <div><h4 className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-[#F5A623] mb-10">Connect</h4><ul className="space-y-4 text-sm text-white/60"><li className="flex items-center gap-3 justify-center md:justify-start hover:text-white cursor-pointer transition-colors"><MapPin size={16} /> Toronto, ON</li><li className="flex items-center gap-3 justify-center md:justify-start hover:text-white cursor-pointer transition-colors"><Instagram size={16} /> @NiagaraTours</li></ul></div>
+            <div><h4 className="text-[0.65rem] font-bold uppercase tracking-[0.3em] text-[#F5A623] mb-10">Newsletter</h4><p className="text-white/40 text-xs mb-8">Exclusive insights and seasonal offers.</p><div className="flex flex-col gap-3"><input className="bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:outline-none focus:border-[#F5A623] transition-all" placeholder="Email address" /><button className="bg-[#F5A623] text-[#0F3D3E] py-4 rounded-xl font-black uppercase text-[0.6rem] tracking-widest shadow-xl">Subscribe</button></div></div>
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-center gap-10"><p className="text-[0.55rem] font-bold uppercase tracking-[0.5em] text-white/20">© 2026 Niagara Tours Canada • Premium Toronto to Niagara Excursions</p><div className="flex gap-10 text-[0.55rem] font-bold uppercase tracking-widest text-white/20"><span className="hover:text-white/60 cursor-pointer">Privacy Policy</span><span className="hover:text-white/60 cursor-pointer">Terms of Service</span></div></div>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-10"><p className="text-[0.55rem] font-bold uppercase tracking-[0.5em] text-white/20">© 2026 Niagara Tours Canada • Premium Toronto to Niagara Excursions</p></div>
         </div>
       </footer>
 
